@@ -1,0 +1,17 @@
+/* calendar.css */
+.rdp {
+  display: inline-block;
+}
+.rdp-month {
+  margin: 0 auto;
+}
+.rdp-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.rdp-day {
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  line-height: 40px;
+}
