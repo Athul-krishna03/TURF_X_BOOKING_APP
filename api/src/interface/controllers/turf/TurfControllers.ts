@@ -39,7 +39,7 @@ export class TurfControllers implements ITurfControllers{
     ){}
     async getAllTurfs(req: Request, res: Response): Promise<void> {
         try {
-            const {page=1,limit=10,search="",lat,lng}=req.query;
+            const {page=1,limit=10,search="",lat,lng,filter}=req.query;
             const location: [number, number] | undefined = (lat !== undefined && lng !== undefined)
                 ? [Number(lng), Number(lat)]
                 : undefined;
@@ -51,7 +51,8 @@ export class TurfControllers implements ITurfControllers{
                 pageNumber,
                 pageSize,
                 searchTermString,
-                location
+                location,
+                filter as string
             );
 
             res.status(HTTP_STATUS.OK).json({

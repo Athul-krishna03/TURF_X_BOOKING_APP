@@ -34,23 +34,29 @@ export class TurfRepository extends BaseRepository<ITurfModel> implements  ITurf
             const [lng, lat] = location;
 
             const pipeline: PipelineStage[] = [
-            {
-                $geoNear: {
-                near: { type: "Point", coordinates: [lng, lat] },
-                distanceField: "distance",
-                spherical: true,
-                query: filter,
-                maxDistance:15000
-                }
-            },
-            { $skip: skip },
-            { $limit: limit }
-            ];
+                {
+                    $geoNear: {
+                    near: { type: "Point", coordinates: [lng, lat] },
+                    distanceField: "distance",
+                    spherical: true,
+                    query: filter,
+                    maxDistance: 15000,
+                    },
+                },
+                {
+                    $facet: {
+                    turfs: [{ $skip: skip }, { $limit: limit }],
+                    totalCount: [{ $count: "count" }],
+                    },
+                },
+                ];
 
-            const results = await TurfModel.aggregate(pipeline);
-            const total = await TurfModel.countDocuments(filter);
+        const [result] = await TurfModel.aggregate(pipeline);
+        const turfs = result?.turfs ?? [];
+        const total = result?.totalCount?.[0]?.count ?? 0;
 
-            return { turfs: results, total };
+        return { turfs, total };
+
         }
 
         // fallback if no location provided

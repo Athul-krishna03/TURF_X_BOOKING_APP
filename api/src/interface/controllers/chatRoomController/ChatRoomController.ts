@@ -12,7 +12,7 @@ export class ChatRoomControllers{
     constructor(
         @inject("IGetChatRoomUseCase") private _getChatRoomUseCase:IGetChatRoomUseCase,
         @inject("ICreateChatRoomUseCase") private _createChatRoomUseCase: ICreateChatRoomUseCase,
-        @inject("IGetChatRoomByGameIdUseCase") private _getChatRoomByGameIdUseCase:IGetChatRoomByGameIdUseCase
+        @inject("IGetChatRoomByGameIdUseCase") private _getChatRoomByGameIdUseCase:IGetChatRoomByGameIdUseCase,
     ){}
     
     async getChatRooms(req:Request,res:Response):Promise<void>{
@@ -25,7 +25,7 @@ export class ChatRoomControllers{
                 })
                 return 
             }
-            const chatRooms = await this._getChatRoomUseCase.execute(userId)
+            const chatRooms = await this._getChatRoomUseCase.execute(userId);
             console.log("chat rooms ",chatRooms);
 
             if(!chatRooms){

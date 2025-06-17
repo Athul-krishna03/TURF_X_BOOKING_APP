@@ -11,10 +11,10 @@ export class GetAllTurfsUseCase implements IGetAllTurfUseCase{
         @inject("ITurfRepository")private turfRepository:ITurfRepository,
         @inject("IReviewRepository") private _reviewRepo:IReviewRepository
     ){}
-    async execute(pageNumber: number, pageSize: number, searchTerm: string,location?: [number, number]): Promise<PagenateTurfs> {
-        let filter:any= {status:"approved"};
+    async execute(pageNumber: number, pageSize: number, searchTerm: string,location?: [number, number],filter?:string): Promise<PagenateTurfs> {
+        let filterSearch:any= {status:"approved"};
         if(searchTerm){
-            filter.$or=[
+            filterSearch.$or=[
                 {name:{$regex:searchTerm,$options:"i"}},
                 {"location.city":{$regex:searchTerm,$options:"i"}}
             ]
@@ -25,7 +25,7 @@ export class GetAllTurfsUseCase implements IGetAllTurfUseCase{
         const skip = (validPageNumber-1)*vaildPageSize;
         const limit = vaildPageSize;
 
-        const {turfs,total} = await this.turfRepository.find(filter,skip,limit,location);
+        const {turfs,total} = await this.turfRepository.find(filterSearch,skip,limit,location);
         const enrichedTurfs = await Promise.all(
             turfs.map(async (turf) => {
                 const reviewData = await this._reviewRepo.getReviewStatsByTurfId({ turfId: turf.turfId });
@@ -35,6 +35,9 @@ export class GetAllTurfsUseCase implements IGetAllTurfUseCase{
                 };
             })
         );
+        if(filter=="top"){
+            enrichedTurfs.sort((a,b)=>b.reviewStats.averageRating-a.reviewStats.averageRating)
+        }
 
         const response: PagenateTurfs = {
             turfs: enrichedTurfs,
