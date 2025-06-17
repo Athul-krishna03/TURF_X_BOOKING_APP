@@ -36,9 +36,9 @@ export default function TurfHeader({ turfData }: TurfHeaderProps) {
           <div className="flex items-center mt-2">
             <div className="flex items-center bg-gray-800/60 px-3 py-1 rounded-full">
               <Star size={14} className="text-green-400 mr-1" />
-              <span className="text-sm font-medium text-white">4.8</span>
+              <span className="text-sm font-medium text-white">{turfData.reviewStats?.averageRating}</span>
             </div>
-            <span className="text-xs text-gray-400 ml-2">(120+ reviews)</span>
+            <span className="text-xs text-gray-400 ml-2">({turfData.reviewStats?.totalReviews})</span>
           </div>
           <Badge className="mt-2 bg-green-900/50 text-green-300 border-green-700">Verified Venue</Badge>
         </div>

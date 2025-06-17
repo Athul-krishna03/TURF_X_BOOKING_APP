@@ -1,6 +1,5 @@
 import { CalendarDays, Clock, Users, MapPin, Crown, X, UserCheck } from "lucide-react";
 import moment from "moment";
-import { ISharedBookingEntity } from "../../types/SharedTypes";
 
 interface HostedgameCardProps {
   game: any;
@@ -169,19 +168,18 @@ export default function HostedgameCard({ game, onCancel }: HostedgameCardProps) 
             Created {moment(game.createdAt).format("MMM D, h:mm A")}
           </div>
           <div className="flex gap-2">
-            {game.status.toLowerCase() != 'cancelled' && (
-              <>
+            {new Date(game.createdAt) > new Date() && game.status.toLowerCase() !== 'cancelled' && (
+              <div className="flex gap-2">
                 <button
                   onClick={handleCancel}
                   className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition-colors"
                 >
                   Cancel game
                 </button>
-                {/* <button className="px-4 py-2 text-sm font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-lg border border-purple-200 transition-colors">
-                  View Players
-                </button> */}
-              </>
-            ) }
+              </div>
+            )}
+
+          
           </div>
         </div>
       </div>

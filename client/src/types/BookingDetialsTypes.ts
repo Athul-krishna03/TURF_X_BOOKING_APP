@@ -11,7 +11,10 @@ export interface TurfDetails {
     name: string
     location: {
         city:string,
-        state:string
+        state:string,
+        coordinates:{
+            coordinates:Array<number | undefined>
+        }
     }
     imageUrl?: string
     aminities: string[]

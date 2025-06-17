@@ -13,11 +13,12 @@ export const useGetAllTurfsQuery=(
     page:number,
     limit:number,
     search:string,
-    location?:[number,number]
+    location?:[number,number],
+    filter?:string
 )=>{
     return useQuery({
-        queryKey:["turfs",page,limit,search,location],
-        queryFn:()=>queryFunc({page,limit,search,location }),
+        queryKey:["turfs",page,limit,search,location,filter],
+        queryFn:()=>queryFunc({page,limit,search,location,filter}),
         placeholderData:(prev)=>prev?{...prev}:undefined,
     })
 }

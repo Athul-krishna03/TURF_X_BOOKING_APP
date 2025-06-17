@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { format } from "date-fns";
+import { addHours, format, parse } from "date-fns";
 import { Clock, Calendar, CreditCard } from "lucide-react";
 import { Slot } from "../../types/SlotsType";
 import { Button } from "../ui/button";
 import { PaymentModal } from "./payment-modal";
 import { cn } from "../../lib/utils";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 type BookingConfirmationProps = {
   date: string;
   slot: Slot;
+  availableSlots: Slot[];
   duration: number;
   price: number;
   currency: string;
@@ -21,6 +23,7 @@ type BookingConfirmationProps = {
 export default function BookingConfirmation({
   date,
   slot,
+  availableSlots,
   duration,
   currency,
   onDurationChange,
@@ -36,6 +39,22 @@ export default function BookingConfirmation({
   const navigate = useNavigate();
 
   const handleConfirmClick = () => {
+    const {  date, startTime } = slot;
+    const startDateTime = parse(startTime, "HH:mm", new Date(date));
+
+    for (let i = 1; i < duration; i++) {
+        const nextTime = addHours(startDateTime, i);
+        const nextTimeStr = format(nextTime, "HH:mm");
+        const nextSlot = availableSlots.filter((val)=>val.startTime==nextTimeStr)
+        console.log("next",nextSlot)
+
+        if (!nextSlot || nextSlot[0].isBooked) {
+           console.log("already")
+            toast.error(`Slot at ${nextTimeStr} is unavailable or already booked`)
+            return
+        }
+    }
+
     if (selectedOption === "book") {
       setIsModalOpen(true);
     } else {

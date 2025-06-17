@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { useGetAllChatRooms } from "../../hooks/user/chatRoom/useGetChatRoom";
 import { uploadProfileImageCloudinary } from "../../utils/cloudinaryImageUpload";
 import { ChatRoom, Message, User } from "../../types/ChatRoomCommunityTypes";
+import { NewsSidebar } from "../../components/chatRoom/news-sidebar";
 
 const socket = io("http://localhost:5000", { autoConnect: false });
 
@@ -162,7 +163,7 @@ export default function CommunityPage() {
   return (
     <div className="flex h-screen bg-gray-900">
       {/* Sidebar - Chat Rooms List */}
-      <div className="w-1/3 bg-gray-800 border-r border-gray-700 flex flex-col">
+      <div className="w-1/4 bg-gray-800 border-r border-gray-700 flex flex-col">
         <div className="p-4 bg-gray-900 border-b border-gray-700">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold text-white">
@@ -247,6 +248,7 @@ export default function CommunityPage() {
           </div>
         )}
       </div>
+      <NewsSidebar className="w-80"/>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Sidebar } from '../../components/layout/Sidebar';
 import { Header } from '../../components/layout/Header';
-import { Star, MapPin, ChevronRight, Clock, Heart, Users } from 'lucide-react';
+import { Star, MapPin, ChevronRight, Heart } from 'lucide-react';
 import { getAllTurfsData } from '../../services/user/userServices';
 import { useGetAllTurfsQuery } from '../../hooks/admin/useGetAllTurfs';
 import { ITurf } from '../../types/Type';
@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { listenForForegroundMessages, requestNotificationPresmission } from '../../services/firebase/messaging';
 import { toast } from 'sonner';
 import { useStoreFCMToken } from '../../hooks/user/userDashboard';
-import { CardLoadingSkeleton } from '../../components/ui/loading/loading-skeletons';
+import AboutSection from '../../components/user/aboutSection';
 
 export default function TurfXDashboard() {
   const { mutate: storeFCMToken } = useStoreFCMToken();
@@ -43,8 +43,8 @@ export default function TurfXDashboard() {
           lng: position.coords.longitude,
         })
       },
-      (err) => {
-        setError("Location permission denied or unavailable")
+      (error) => {
+        setError(error.message || "Location permission denied or unavailable")
       },
       {
         enableHighAccuracy: true,
@@ -90,7 +90,7 @@ export default function TurfXDashboard() {
     setSearchQuery(val);
   };
 
-  const { data } = useGetAllTurfsQuery(
+  const { data ,isLoading  } = useGetAllTurfsQuery(
     getAllTurfsData,
     currentPage,
     limit,
@@ -101,6 +101,7 @@ export default function TurfXDashboard() {
   const turfs = (data?.turfs ?? []) as ITurf[];
   dispatch(setTurfs(turfs));
   console.log(turfs);
+
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white overflow-hidden">
       <Sidebar isExpanded={isSidebarExpanded} onToggle={toggleSidebar} />
@@ -112,7 +113,7 @@ export default function TurfXDashboard() {
           <section className="relative h-96 overflow-hidden">
             <div className="absolute inset-0 "></div>
             <img 
-              src="\public\kb.jpg" 
+              src="\turfImage.jpg" 
               alt="Sports venue at night" 
               className="w-full h-full object-cover"
             />
@@ -155,8 +156,20 @@ export default function TurfXDashboard() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {!turfs &&
-                <CardLoadingSkeleton/>
+              {isLoading  || error &&
+                <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+                  <div className="bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-700/50">
+                    <div className="flex flex-col items-center space-y-4">
+                      <div className="relative w-12 h-12">
+                        <div className="absolute inset-0 border-4 border-green-500/30 rounded-full"></div>
+                        <div className="absolute inset-0 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                      <div className="text-sm text-gray-400 animate-pulse">
+                        Loading turf details...
+                      </div>
+                    </div>
+                  </div>
+                </div>
               }
             {turfs
             .filter((turf) => !turf.isBlocked)
@@ -199,51 +212,8 @@ export default function TurfXDashboard() {
 
             </div>
           </section>
-
-          <section className="px-6 md:px-16 mb-12">
-            <h2 className="text-3xl font-bold mb-8">Your Activity</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur border border-gray-700 rounded-2xl p-6">
-                <h3 className="text-xl font-bold mb-4 flex items-center">
-                  <Clock className="mr-2 text-green-400" size={20} />
-                  Current Booking
-                </h3>
-                <div className="flex items-center space-x-4 bg-gray-800/50 rounded-xl p-4">
-                  <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=80&h=80&fit=crop" alt="Venue" className="w-16 h-16 rounded-xl object-cover" />
-                  <div className="flex-1">
-                    <h4 className="font-bold text-white">Greenway Arena</h4>
-                    <p className="text-sm text-gray-400 mt-1">Today, 7:00 PM - 8:00 PM</p>
-                    <p className="text-sm text-gray-400">Koramangala, 1.3 km away</p>
-                    <span className="inline-block px-3 py-1 text-xs rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 mt-2">
-                      Confirmed
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur border border-gray-700 rounded-2xl p-6">
-                <h3 className="text-xl font-bold mb-4 flex items-center">
-                  <Users className="mr-2 text-green-400" size={20} />
-                  Nearby Games
-                </h3>
-                <div className="space-y-3">
-                  {[
-                    { sport: 'Football', time: '6:00 PM', players: '8/11', venue: 'Elite Arena' },
-                    { sport: 'Cricket', time: '7:30 PM', players: '18/22', venue: 'Victory Ground' }
-                  ].map((game, index) => (
-                    <div key={index} className="flex items-center justify-between bg-gray-800/50 rounded-xl p-3">
-                      <div>
-                        <p className="font-medium text-white">{game.sport} • {game.venue}</p>
-                        <p className="text-sm text-gray-400">{game.time} • {game.players} players</p>
-                      </div>
-                      <button className="px-4 py-2 bg-green-500/20 text-green-400 border border-green-500/30 rounded-lg text-sm font-medium hover:bg-green-500/30 transition-colors">
-                        Join
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+          <section>
+            <AboutSection/>
           </section>
         </main>
       </div>

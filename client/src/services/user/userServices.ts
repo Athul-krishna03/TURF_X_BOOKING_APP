@@ -22,12 +22,14 @@ export const getAllTurfsData = async({
     page=1,
     limit=10,
     search="",
-    location
+    location,
+    filter
 }:{
     page:number,
     limit:number,
     search:string,
     location?: [number, number]
+    filter?:string
 })=>{
     const reponse = await userAxiosInstance.get("/_us/user/get-Turfs",{
         params:{
@@ -36,6 +38,7 @@ export const getAllTurfsData = async({
         search,
         lat: location?.[1],
         lng: location?.[0],
+        filter
         }
     });
     return reponse.data

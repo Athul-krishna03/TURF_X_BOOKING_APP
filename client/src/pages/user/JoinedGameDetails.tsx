@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../..
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar"
 import { Badge } from "../../components/ui/badge"
 import { Button } from "../../components/ui/button"
-import { CalendarDays, Clock, MapPin, Users, Wallet, Star, Trophy, MessageCircle, Plus } from "lucide-react"
+import { CalendarDays, Clock, MapPin, Users, Wallet, Star, Trophy, MessageCircle, Plus, X } from "lucide-react"
 import type { JoinedGameData } from "../../types/BookingDetialsTypes"
 import { useSelector } from "react-redux"
 import CreateChatRoomModal from "../../components/modals/create-chat-room-modal"
@@ -13,11 +13,14 @@ import { toast } from "sonner"
 import { useCreateChatRoom } from "../../hooks/user/chatRoom/useCreateChatRoom"
 import { useGetChatRoomByGameId } from "../../hooks/user/chatRoom/useGetChatRoomByGameId"
 import { useGetJoinedGameDetials } from "../../hooks/user/useGetJoinedGameDetials"
+import MapLocationPicker from "../../components/turf/turfDetialsComponents/map-location-picker"
+import { LocationCoordinates } from "../../types/TurfTypes"
 
 const JoinedGameDetails = () => {
   const { joinedGameId } = useParams()
   const [joinedGameData, setJoinedGameData] = useState<JoinedGameData | null>(null)
   const [existingChatRoom, setExistingChatRoom] = useState<any>(null)
+  const [open, setOpen] = useState(false)
 
   const totalContributions = joinedGameData
     ? Object.values(joinedGameData?.booking.walletContributions).reduce((acc, val) => acc + val, 0)
@@ -66,7 +69,6 @@ const JoinedGameDetails = () => {
       throw error
     }
   }
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center">
@@ -77,14 +79,13 @@ const JoinedGameDetails = () => {
       </div>
     )
   }
-  // if (!joinedGameData) {
-  //   return (
-  //     <NoDataFound message="No data found." icon={<FileQuestion className="h-10 w-10 text-gray-400" />} className="mt-4" />
-  //   )
-  // }
-
   const booking = joinedGameData?.booking;
   const turf = joinedGameData?.turf;
+  const coordinates: LocationCoordinates = {
+      lat: turf?.location?.coordinates.coordinates[1] ?? 0,
+      lng: turf?.location?.coordinates.coordinates[0] ?? 0
+    }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
@@ -156,6 +157,15 @@ const JoinedGameDetails = () => {
               }
             />
           ) : null}
+
+          <div className="flex gap-2 items-center">
+          <Button
+            onClick={() => setOpen(true)}
+            className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600"
+          >
+            See On Map
+          </Button>
+        </div>
         </div>
 
         </div>
@@ -331,6 +341,44 @@ const JoinedGameDetails = () => {
           </div>
         </div>
       </div>
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop/Overlay */}
+          <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setOpen(false)}
+          />
+          
+          {/* Modal Content */}
+          <div className="relative bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+            {/* Header with Close Button */}
+            <div className="flex items-center justify-between p-4 border-b bg-gray-50">
+              <h2 className="text-lg font-semibold text-gray-800">
+                {turf?.name} - Location Map
+              </h2>
+              <Button
+                onClick={() => setOpen(false)}
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8 rounded-full hover:bg-gray-200"
+              >
+                <X size={18} className="text-gray-600" />
+              </Button>
+            </div>
+            
+            {/* Map Content */}
+            <div className="p-4">
+              <MapLocationPicker
+                coordinates={coordinates}
+                readOnly
+                height="500px"
+                showCard={false}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

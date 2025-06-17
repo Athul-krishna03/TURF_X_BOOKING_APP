@@ -63,12 +63,13 @@ export default function TurfList() {
     };
   }, [searchQuery]);
 
-  const { data } = useGetAllTurfsQuery(
+  const { data,isLoading } = useGetAllTurfsQuery(
     getAllTurfsData,
     currentPage,
     limit,
     debouncedSearch,
-    filterOption === "near" ?  [location?.lng ?? 0, location?.lat ?? 0] :undefined
+    filterOption === "near" ?  [location?.lng ?? 0, location?.lat ?? 0] :undefined,
+    filterOption !=="near" ? filterOption:undefined
   );
   const handleFilterChange = (val:string)=>{
     setFilterOption(()=>val)
@@ -129,6 +130,21 @@ export default function TurfList() {
 
           {/* Turf Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {isLoading && 
+                <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+                  <div className="bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-700/50">
+                    <div className="flex flex-col items-center space-y-4">
+                      <div className="relative w-12 h-12">
+                        <div className="absolute inset-0 border-4 border-green-500/30 rounded-full"></div>
+                        <div className="absolute inset-0 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                      <div className="text-sm text-gray-400 animate-pulse">
+                        Loading turf details...
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            }
             {turfs
               .filter((turf) => !turf.isBlocked)
               .map((turf) => (

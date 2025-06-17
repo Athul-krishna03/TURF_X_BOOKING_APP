@@ -122,7 +122,7 @@ export default function NormalBookingCard({ booking, onCancel }: NormalBookingCa
             Booked on {moment(_doc.createdAt || new Date()).format("MMM D, h:mm A")}
           </div>
           <div className="flex gap-2">
-            {_doc.status.toLowerCase() === 'booked' && (
+            {(_doc.status.toLowerCase() === 'booked' && _doc.createdAt > new Date() ) && (
               <button
                 onClick={handleCancel}
                 className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition-colors"

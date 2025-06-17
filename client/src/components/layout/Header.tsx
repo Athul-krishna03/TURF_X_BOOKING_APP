@@ -1,4 +1,4 @@
-import { Search, Bell, User, Menu } from 'lucide-react';
+import { Bell, User, Menu } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NotificationCenter } from '../modals/NotificationModal';
@@ -8,14 +8,9 @@ interface HeaderProps {
   setSearchVal: (value: string) => void;
 }
 
-export const Header = ({ onMenuClick ,setSearchVal}: HeaderProps) => {
+export const Header = ({ onMenuClick }: HeaderProps) => {
     const [notificationModalOpen,setNotificationModalOpen] = useState(false);
     const navigate = useNavigate()
-    const  [search,setSearch] = useState("");
-    const handleValChange = (value: string) => {
-        setSearch(value);
-        setSearchVal(value);
-    }
     const openNotification = ()=>{
     setNotificationModalOpen(true)
     }
@@ -28,16 +23,6 @@ export const Header = ({ onMenuClick ,setSearchVal}: HeaderProps) => {
         >
           <Menu size={24} />
         </button>
-        <div className="relative w-full max-w-md">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => handleValChange(e.target.value)}
-            placeholder="Search venues..."
-            className="w-full bg-gray-800 text-white rounded-md py-2 pl-10 pr-4 focus:outline-none focus:ring-1 focus:ring-green-500"
-          />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-        </div>
       </div>
 
       <div className="flex items-center space-x-4">

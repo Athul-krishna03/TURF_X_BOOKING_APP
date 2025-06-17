@@ -29,6 +29,6 @@ export interface PhotoPreview {
 }
 
 export interface LocationCoordinates {
-    lat: number
-    lng: number
+    lat: number 
+    lng: number 
 }

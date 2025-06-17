@@ -119,6 +119,7 @@ export default function BookingSection({
             {bookingStep === "confirmation" && selectedDate && selectedSlot && (
               <BookingConfirmation
                 date={selectedSlot.date}
+                availableSlots={availableSlots}
                 slot={selectedSlot}
                 duration={duration}
                 currency={"₹"}
