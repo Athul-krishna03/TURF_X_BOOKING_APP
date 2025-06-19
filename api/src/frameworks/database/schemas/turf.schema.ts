@@ -32,6 +32,7 @@ export const TurfSchema = new Schema<ITurfModel>(
       type: String, 
       required: true 
     },
+    games:[{type:String}],
     createdAt: { 
       type: Date, 
       default: Date.now 
@@ -49,7 +50,6 @@ export const TurfSchema = new Schema<ITurfModel>(
       type: {
         type: String,
         enum: ['Point'],
-        required: true,
         default: 'Point'
       },
       coordinates: {

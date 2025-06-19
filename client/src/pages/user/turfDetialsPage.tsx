@@ -108,29 +108,17 @@ export default function TurfDetailsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      {/* Header */}
-
-      {/* Gallery */}
       <div className="container mx-auto px-4 pb-4">
         <TurfGallery photos={turfData?.turfPhotos} turfName={turfData?.name} onBack={handleBack}/>
       </div>
-
       <TurfHeader turfData={turfData} />
-
-      {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Column - Info and Reviews */}
           <div className="lg:w-2/3 space-y-8">
             <TurfInfoSection turfData={turfData} />
-
             <Separator className="border-gray-800" />
-
-            {/* Reviews Section */}
             <TurfReviews turfId={turfId!} turfName={turfData.name} />
           </div>
-
-          {/* Right Column - Booking */}
           <div className="lg:w-1/3 mt-6 lg:mt-0">
             <BookingSection
               turfData={turfData}

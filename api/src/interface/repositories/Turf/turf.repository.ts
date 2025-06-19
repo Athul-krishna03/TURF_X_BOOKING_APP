@@ -59,7 +59,6 @@ export class TurfRepository extends BaseRepository<ITurfModel> implements  ITurf
 
         }
 
-        // fallback if no location provided
         const turfs = await TurfModel.find(filter).skip(skip).limit(limit).lean();
         const total = await TurfModel.countDocuments(filter);
         return { turfs, total };
@@ -105,7 +104,7 @@ export class TurfRepository extends BaseRepository<ITurfModel> implements  ITurf
                 {
                     new:true
                 }
-            ).select('name phone  email location aminities turfPhotos')
+            ).select('name phone  email location aminities turfPhotos courtSize')
             .exec()
             console.log("data from repo layer of turf profile",updateProfile);
             

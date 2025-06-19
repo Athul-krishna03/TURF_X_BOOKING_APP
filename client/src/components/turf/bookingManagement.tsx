@@ -85,12 +85,9 @@ const BookingManagement = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
       <div className="fixed top-0 left-0 h-screen w-64 bg-white shadow-lg z-10">
         <TurfSideBar />
       </div>
-
-      {/* Main content */}
       <div className="ml-64 flex-1 p-8 overflow-auto">
         <h1 className="text-2xl font-semibold mb-6">Booking Management</h1>
 
@@ -111,8 +108,6 @@ const BookingManagement = () => {
               Hosted Games
             </TabsTrigger>
           </TabsList>
-
-          {/* Normal Bookings */}
           <TabsContent value="normal">
             {isLoading ? (
               <CardLoadingSkeleton/>
@@ -126,8 +121,6 @@ const BookingManagement = () => {
               </div>
             )}
           </TabsContent>
-
-          {/* Hosted Games */}
           <TabsContent value="hosted">
             {isLoading ? (
               <p>Loading hosted games...</p>

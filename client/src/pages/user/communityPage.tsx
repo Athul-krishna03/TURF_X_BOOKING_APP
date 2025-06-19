@@ -116,7 +116,6 @@ export default function CommunityPage() {
     reader.readAsDataURL(file);
   };
 
-  // Helper function to get user info
   const getUserInfo = (userId: string): User => {
     const user = users.find((u) => u.id === userId);
     return (
@@ -130,7 +129,6 @@ export default function CommunityPage() {
     );
   };
 
-  // Helper function to format timestamp
   const formatTimestamp = (timestamp: Date): string => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -146,9 +144,7 @@ export default function CommunityPage() {
     return "Click to load messages";
   };
 
-  // Helper function to get unread count (simplified for demo)
   const getUnreadCount = (room: ChatRoom): number => {
-    // In a real app, you'd track this properly
     return 0;
   };
 
@@ -187,9 +183,7 @@ export default function CommunityPage() {
               selectedRoom={selectedRoom}
               onRoomSelect={handleRoomSelect}
               getUserInfo={getUserInfo}
-              formatTimestamp={(timestamp) =>
-                formatTimestamp(new Date(timestamp.$date))
-              }
+              formatTimestamp={formatTimestamp}
               getLastMessage={getLastMessage}
               getUnreadCount={getUnreadCount}
             />

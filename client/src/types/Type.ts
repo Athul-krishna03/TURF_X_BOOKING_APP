@@ -36,6 +36,7 @@ export interface SignupFormValues {
     createdAt:Date,
     location: any;
     aminities: string[];
+    games:string[];
     turfPhotos:string[];
     reviewStats?:{
       totalReviews:number,
@@ -75,7 +76,15 @@ export interface Turf{
   courtSize?: string;
   turfPhotoUrls?: string[];
   aminities: string[];
-  location:object;
+  location:{
+        address: string;
+        city: string;
+        state?: string;
+        coordinates: {
+          type:string,
+          coordinates:[number,number]
+        };
+  };
   status:string,
   createdAt:Date,
 }

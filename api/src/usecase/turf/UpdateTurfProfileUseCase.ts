@@ -14,7 +14,6 @@ export class UpdateTurfProfileUseCase implements IUpdateTurfProfileUseCase{
 
     async execute(turfId: string, data: Partial<ITurfEntity>): Promise<TurfProfileResponse> {
         const isExist = await this.turfRepo.findById(turfId);
-            console.log("edit user data",data)
             if (!isExist) {
             throw new CustomError(
                 ERROR_MESSAGES.USER_NOT_FOUND,
@@ -25,7 +24,6 @@ export class UpdateTurfProfileUseCase implements IUpdateTurfProfileUseCase{
                 turfId,
                 data
             );
-            console.log("use case update profile turf after repo",updateProfile);
             
             if (!updateProfile) {
             throw new CustomError(

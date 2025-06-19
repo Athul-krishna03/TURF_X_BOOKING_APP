@@ -109,19 +109,6 @@ const HostedGamesList = () => {
             className="pl-10 bg-white border-gray-300 text-black"
           />
         </div>
-        {/* <Select value={sportFilter} onValueChange={setSportFilter}>
-          <SelectTrigger className="w-full md:w-[180px] bg-white">
-            <SelectValue placeholder="Sport Type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Sports</SelectItem>
-            <SelectItem value="football">Football</SelectItem>
-            <SelectItem value="cricket">Cricket</SelectItem>
-            <SelectItem value="basketball">Basketball</SelectItem>
-            <SelectItem value="tennis">Tennis</SelectItem>
-            <SelectItem value="badminton">Badminton</SelectItem>
-          </SelectContent>
-        </Select> */}
       </div>
 
       {isLoading && (
@@ -145,6 +132,7 @@ const HostedGamesList = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredGames.map((game: HostedGame) => (
+          game.status !== "Cancelled" &&
           <div
             key={game._id}
             className="bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-900 hover:shadow-lg transition-shadow duration-300"

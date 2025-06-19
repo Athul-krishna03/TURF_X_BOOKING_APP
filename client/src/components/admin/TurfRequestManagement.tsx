@@ -263,11 +263,6 @@ export default function TurfRequestManagement() {
                         </p>
                       </div>
                     </div>
-
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-500">Description</h4>
-                      <p className="text-base mt-1">{selectedTurf.aminities || "No description provided"}</p>
-                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -277,6 +272,9 @@ export default function TurfRequestManagement() {
                   <CardHeader>
                     <CardTitle>Location Details</CardTitle>
                     <CardDescription>Address and location information</CardDescription>
+                    <CardContent>
+                      
+                    </CardContent>
                   </CardHeader>
                 </Card>
               </TabsContent>
@@ -306,36 +304,6 @@ export default function TurfRequestManagement() {
                     </div>
 
                     <Separator />
-
-                    {/* <div>
-                      <h4 className="text-sm font-medium text-gray-500 mb-2">Operating Hours</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <h5 className="text-sm font-medium">Weekdays</h5>
-                          <p>{selectedTurf.operatingHours?.weekdays || "Not specified"}</p>
-                        </div>
-                        <div>
-                          <h5 className="text-sm font-medium">Weekends</h5>
-                          <p>{selectedTurf.operatingHours?.weekends || "Not specified"}</p>
-                        </div>
-                      </div>
-                    </div> */}
-
-                    <Separator />
-
-                    {/* <div>
-                      <h4 className="text-sm font-medium text-gray-500 mb-2">Pricing</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <h5 className="text-sm font-medium">Hourly Rate</h5>
-                          <p>₹{selectedTurf.pricing?.hourly || "Not specified"}</p>
-                        </div>
-                        <div>
-                          <h5 className="text-sm font-medium">Daily Rate</h5>
-                          <p>₹{selectedTurf.pricing?.daily || "Not specified"}</p>
-                        </div>
-                      </div>
-                    </div> */}
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -347,52 +315,6 @@ export default function TurfRequestManagement() {
                     <CardDescription>Legal documents and verification information</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {selectedTurf.documents?.license && (
-                        <div>
-                          <h4 className="text-sm font-medium text-gray-500 mb-2">Business License</h4>
-                          <div className="border border-gray-200 rounded-md p-4">
-                            <div className="flex items-center justify-between">
-                              <span>License Document</span>
-                              <Button variant="outline" size="sm">
-                                View
-                              </Button>
-                            </div>
-                            <div className="mt-2">
-                              <p className="text-sm text-gray-500">
-                                License Number: {selectedTurf.documents.license.number || "N/A"}
-                              </p>
-                              <p className="text-sm text-gray-500">
-                                Expiry: {selectedTurf.documents.license.expiry || "N/A"}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {selectedTurf.documents?.insurance && (
-                        <div>
-                          <h4 className="text-sm font-medium text-gray-500 mb-2">Insurance</h4>
-                          <div className="border border-gray-200 rounded-md p-4">
-                            <div className="flex items-center justify-between">
-                              <span>Insurance Document</span>
-                              <Button variant="outline" size="sm">
-                                View
-                              </Button>
-                            </div>
-                            <div className="mt-2">
-                              <p className="text-sm text-gray-500">
-                                Policy Number: {selectedTurf.documents.insurance.policyNumber || "N/A"}
-                              </p>
-                              <p className="text-sm text-gray-500">
-                                Expiry: {selectedTurf.documents.insurance.expiry || "N/A"}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div> */}
-
                     <Separator />
 
                     <div>

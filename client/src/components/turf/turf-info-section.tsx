@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip"
-import { Shield, CheckCircle2, Car, Droplets, ShowerHead, Utensils, Wifi, Users } from "lucide-react"
+import { Shield, CheckCircle2, Car, Droplets, ShowerHead, Utensils, Wifi, Users, Circle } from "lucide-react"
 import type { ITurf } from "../../types/Type"
 
 interface TurfInfoSectionProps {
@@ -43,10 +43,9 @@ export default function TurfInfoSection({ turfData }: TurfInfoSectionProps) {
         </CardHeader>
         <CardContent>
           <p className="text-gray-300 leading-relaxed">
-            Denfield is a premier sports venue in Irinjalakuda, Kerala, offering a spacious 11 vs 11 football court
+            `${turfData.name}` is a premier sports venue in `${turfData.location.city},${turfData.location.state}` offering a spacious 11 vs 11 football court
             perfect for competitive matches. Equipped with essential amenities like parking and clean washrooms, it
-            ensures a hassle-free experience. Established in April 2025, Denfield is ideal for sports enthusiasts
-            seeking a quality turf.
+            ensures a hassle-free experience
           </p>
         </CardContent>
       </Card>
@@ -61,9 +60,22 @@ export default function TurfInfoSection({ turfData }: TurfInfoSectionProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          <div className="flex justify-between space-x-2 mb-4">
           <div className="flex items-center space-x-2 mb-4">
             <Shield size={18} className="text-green-400" />
             <span className="text-gray-300">Court Size: {turfData?.courtSize}</span>
+          </div>
+          <div className="flex items-center space-x-2 mb-4">
+            <Circle size={18} className="text-green-400" />
+            <div className="text-gray-300 flex items-center space-x-2">
+              <span>Games:</span>
+              <ul className="flex space-x-2">
+                {turfData.games.map((val, idx) => (
+                  <li key={idx} className="list-none">{val}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
           </div>
         </CardContent>
       </Card>

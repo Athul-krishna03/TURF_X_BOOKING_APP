@@ -10,17 +10,18 @@ export interface TurfFormValues {
     pricePerHour: string
     isBlocked: boolean
     aminities: string[]
+    games:string[]
     turfPhotos: File[]
     turfPhotoUrls: string[]
     location: {
-        address: string
-        city: string
-        state: string
+        address: string;
+        city: string;
+        state?: string;
         coordinates: {
             type:string,
             coordinates:[number,number]
-        }
-    }
+        };
+    };
 }
 
 export interface PhotoPreview {

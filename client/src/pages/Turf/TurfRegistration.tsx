@@ -10,6 +10,7 @@ import { useToast } from "../../hooks/useToast";
 import OTPModal from "../../components/modals/OTPmodal";
 import { useNavigate } from "react-router-dom";
 import TurfRegisterForm from "../../components/auth/TurfSignup";
+import { uploadProfileImageCloudinary } from "../../utils/cloudinaryImageUpload";
 
 const TurfRegistrationForm: React.FC = () => {
   const [isOTPModalOpen, setIsOTPModalOpen] = useState<boolean>(false);
@@ -26,8 +27,8 @@ const TurfRegistrationForm: React.FC = () => {
   ) => {
     try {
       setSubmitting(true);
-      const uploadPromises = values.turfPhotos.map((photo) =>
-        uploadToCloudinary(photo)
+      const uploadPromises = values.turfPhotos.map(async (photo) =>
+        await uploadProfileImageCloudinary(photo)
       );
       const uploadedUrls = await Promise.all(uploadPromises);
       const formDataWithUrls = {
@@ -124,26 +125,6 @@ const TurfRegistrationForm: React.FC = () => {
       setIsLoading(false);
     }
   };
-
-  const uploadToCloudinary = async (file: File): Promise<string> => {
-    const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-    const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-
-    try {
-      const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
-        formData
-      );
-      return response.data.secure_url;
-    } catch (error) {
-      console.error("Error uploading to Cloudinary:", error);
-      throw error;
-    }
-  };
-
   return (
     <>
       <div className="min-h-screen bg-black text-white p-6">

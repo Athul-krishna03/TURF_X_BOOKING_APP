@@ -9,7 +9,7 @@ interface ChatRoomsListProps {
   selectedRoom: ChatRoom | null
   onRoomSelect: (room: ChatRoom) => void
   getUserInfo: (userId: string) => User
-  formatTimestamp: (timestamp: { $date: string }) => string
+  formatTimestamp: (timestamp: Date) => string;
   getLastMessage: (room: ChatRoom) => string
   getUnreadCount: (room: ChatRoom) => number
 }
@@ -24,6 +24,7 @@ export function ChatRoomsList({
   getUnreadCount,
 }: ChatRoomsListProps) {
     if (rooms.length === 0) {
+      console.log("userinfo",getUserInfo)
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
         <div className="relative mb-8">

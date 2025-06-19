@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import { injectable } from "tsyringe";
 import { INodemailerService } from "../../entities/services/INodeMailerService";
 import { config } from "../../shared/config";
-import { VERIFICATION_MAIL_CONTENT,HTTP_STATUS,ERROR_MESSAGES,SUCCESS_MESSAGES,RESET_PASSWORD_MAIL_CONTENT } from "../../shared/constants";
+import { VERIFICATION_MAIL_CONTENT,HTTP_STATUS,ERROR_MESSAGES,SUCCESS_MESSAGES,RESET_PASSWORD_MAIL_CONTENT, TURF_REGISTRATION_REJECTION_CONTENT } from "../../shared/constants";
 
 @injectable()
 export class NodemailerService implements INodemailerService {
@@ -56,7 +56,7 @@ export class NodemailerService implements INodemailerService {
             from:`Turf_x <${config.nodemailer.EMAIL_USER}>`,
             to:email,
             subject:subject,
-            html:`${RESET_PASSWORD_MAIL_CONTENT(content)}`
+            html:`${TURF_REGISTRATION_REJECTION_CONTENT(content,"turf_X@suport.com")}`
         }
         await this.transporter.sendMail(mailOptions);
 }

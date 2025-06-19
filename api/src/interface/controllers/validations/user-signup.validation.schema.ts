@@ -34,6 +34,7 @@ export const turfvalidationSchema = z
       .min(100, { message: "Price must be a positive number" }),
     isBlocked: z.boolean().optional(),
     aminities: z.array(z.string()).min(1, "At least one amenity is required"),
+    games: z.array(z.string()).min(1, "At least one game is required"),
     turfPhotos: z.array(z.any()).optional(), 
     turfPhotoUrls: z.array(z.string().url()).optional(),
     location: z.object({

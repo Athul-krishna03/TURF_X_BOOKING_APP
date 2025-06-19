@@ -42,20 +42,21 @@ export class SendMessageUseCase implements ISendMessageUseCase{
                 "New Message",
                 `You have a new message from ${user.name} from ${chatRoom?.name}`,
             );
-        }
+        
 
-        if(user?.fcmToken) {
-            // Send FCM notification
-            const payload = {
-                notification: {
-                    title: "New Message",
-                    body: `You have a new message from ${message.senderId}`,
+            if(user?.fcmToken) {
+                // Send FCM notification
+                const payload = {
+                    notification: {
+                        title: "New Message",
+                        body: `You have a new message from ${message.senderId}`,
+                    }
+                };
+                try {
+                    await messaging.send({notification: payload.notification, token: user.fcmToken});
+                } catch (error) {
+                    console.error("Error sending FCM notification:", error);
                 }
-            };
-            try {
-                await messaging.send({notification: payload.notification, token: user.fcmToken});
-            } catch (error) {
-                console.error("Error sending FCM notification:", error);
             }
         }
 

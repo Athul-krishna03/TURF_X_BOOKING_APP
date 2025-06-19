@@ -48,8 +48,8 @@ export default function BookingConfirmation({
         const nextSlot = availableSlots.filter((val)=>val.startTime==nextTimeStr)
         console.log("next",nextSlot)
 
-        if (!nextSlot || nextSlot[0].isBooked) {
-           console.log("already")
+        if (nextSlot.length==0 || nextSlot[0].isBooked) {
+            console.log("already")
             toast.error(`Slot at ${nextTimeStr} is unavailable or already booked`)
             return
         }

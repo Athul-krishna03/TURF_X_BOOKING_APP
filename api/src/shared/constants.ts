@@ -191,3 +191,51 @@ export const RESET_PASSWORD_MAIL_CONTENT = (
    </div>
 </div>
 `;
+
+export const TURF_REGISTRATION_REJECTION_CONTENT = (
+  reason: string,
+  supportEmail: string
+) => `
+<div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #ffffff; background-color: #12181f;">
+   <!-- Logo & Header Section -->
+   <div style="text-align: center; margin-bottom: 30px; padding-top: 20px;">
+      <h1 style="font-size: 42px; font-weight: bold; margin: 0; color: #ffffff;">
+         ⚽ TURF<span style="color: #30db5b;">-X</span>
+      </h1>
+   </div>
+
+   <h2 style="color: #ff4f4f; text-align: center; margin-bottom: 30px;">
+      Turf Registration Request Rejected ❌
+   </h2>
+
+   <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px; text-align: center; color: #CCCCCC;">
+      Thank you for your interest in registering your turf on Turf-X.
+   </p>
+
+   <div style="background-color: #1a1f26; border-radius: 8px; padding: 20px; margin: 25px 0; text-align: center; border: 1px solid #ff4f4f;">
+      <p style="font-size: 16px; color: #CCCCCC; margin-bottom: 10px;">
+         Unfortunately, your registration request has been rejected.
+      </p>
+      <p style="font-size: 14px; color: #bbbbbb; margin-bottom: 0;">
+         Reason: ${reason}
+      </p>
+   </div>
+
+   <p style="font-size: 14px; color: #999999; margin-top: 20px; text-align: center;">
+      If you believe this was a mistake or need further clarification, feel free to reach out to our support team.
+   </p>
+
+   <!-- Support Section -->
+   <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333840; text-align: center;">
+      <p style="font-size: 14px; color: #BBBBBB;">
+         Need assistance? Contact Turf-X support 🛠️<br>
+         📧 Email: <a href="mailto:${supportEmail}" style="color: #30db5b; text-decoration: none;">${supportEmail}</a>
+      </p>
+   </div>
+
+   <!-- Footer -->
+   <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #999999;">
+      © ${new Date().getFullYear()} <span style="color: #30db5b;">Turf-X</span>. All rights reserved.
+   </div>
+</div>
+`;

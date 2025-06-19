@@ -39,6 +39,7 @@ export class TurfRegisterStrategy implements IRegisterStrategy{
             role,
             courtSize,
             aminities,
+            games,
             turfPhotos,
             location,
         } = user as TurfRegisterDTO;
@@ -60,6 +61,7 @@ export class TurfRegisterStrategy implements IRegisterStrategy{
                 role,
                 isBlocked: false,
                 courtSize,
+                games,
                 turfPhotos,
                 aminities,
                 location

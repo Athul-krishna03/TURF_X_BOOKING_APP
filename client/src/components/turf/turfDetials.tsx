@@ -1,6 +1,5 @@
 "use client"
 
-import type React from "react"
 import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -8,20 +7,7 @@ import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { Button } from "../ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
-import {
-  ArrowLeft,
-  Building,
-  Edit,
-  MapPin,
-  Phone,
-  Mail,
-  KeyRound,
-  Camera,
-  Star,
-  DollarSign,
-  Ruler,
-  FileText,
-} from "lucide-react"
+import {ArrowLeft,Building,Edit,MapPin,Phone,Mail,KeyRound,Camera,Star,Ruler,FileText,} from "lucide-react"
 import { turfDetailsSchema } from "../../utils/validations/turfValidator"
 import { updateTurfDetails, type updateTurfProfilePayload } from "../../store/slices/turf.slice"
 import type { AppDispatch } from "../../store/store"
@@ -33,22 +19,24 @@ import AmenitiesSelector from "../turf/turfDetialsComponents/amenities-selector"
 import MapLocationPicker from "../turf/turfDetialsComponents/map-location-picker"
 import type { LocationCoordinates } from "../../types/TurfTypes"
 import { Form, Formik } from "formik"
+import { uploadProfileImageCloudinary } from "../../utils/cloudinaryImageUpload"
 
 export default function TurfDetails() {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const turf = useSelector((state: any) => state.turf?.turf || {})
+  console.log("turf data",turf)
 
   const { mutateAsync } = useTurfChangePassword()
   const [editMode, setEditMode] = useState(false)
   const [showPasswordChange, setShowPasswordChange] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [turfPhotos, setTurfPhotos] = useState<File[]>([])
-  const [turfPhotoUrls, setTurfPhotoUrls] = useState<string[]>(turf.turfPhotos || [])
+  const [turfPhotoUrls,  setTurfPhotoUrls] = useState<string[]>(turf.turfPhotos || [])
 
   const [coordinates, setCoordinates] = useState<LocationCoordinates>({
-    lat: turf?.location?.coordinates?.lat || 12.9716,
-    lng: turf?.location?.coordinates?.lng || 77.5946,
+    lat: turf?.location?.coordinates?.coordinates[1]|| 12.9716,
+    lng: turf?.location?.coordinates?.coordinates[0] || 77.5946,
   })
 
   // Enhanced form data state
@@ -62,33 +50,32 @@ export default function TurfDetails() {
     email: turf.email || "",
     courtSize: turf.courtSize || "",
     pricePerHour: turf.pricePerHour || "",
+    turfPhotos:turf.turfPhotos || [],
     aminities: turf.aminities || ["Parking", "Changing Rooms", "Floodlights"],
   })
-
-  // Handle form input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  // Save turf details (implementation remains the same as before)
-  const saveChanges = async () => {
-    try {
+  const saveChanges = async (values: typeof formData) => {
+      try {
       setIsSubmitting(true)
-      await turfDetailsSchema.validate(formData, { abortEarly: false })
-
+      await turfDetailsSchema.validate(values, { abortEarly: false })
+      const uploadPromises = turfPhotos.map(async (photo:File) =>
+              await uploadProfileImageCloudinary(photo)
+            );
+      const uploadedUrls = await Promise.all(uploadPromises);
+      console.log("urls ",uploadedUrls)
+      console.log("photos",turfPhotoUrls)
+      setTurfPhotoUrls(uploadedUrls.filter((url): url is string => url !== null));
       const updatedTurfData: updateTurfProfilePayload = {
-        ...formData,
+        ...values,
         location: {
-          address: formData.address,
-          city: formData.city,
-          state: formData.state,
+          address: values.address,
+          city: values.city,
+          state: values.state,
           coordinates: {
-            lat: coordinates.lat,
-            lng: coordinates.lng,
+            type:"Point",
+            coordinates:[coordinates.lng, coordinates.lat]
           },
         },
-        turfPhotos: turfPhotoUrls,
+        turfPhotos: [...turf.turfPhotos, ...uploadedUrls].filter((url): url is string => url !== null),
       }
 
       await dispatch(updateTurfDetails(updatedTurfData))
@@ -176,89 +163,19 @@ export default function TurfDetails() {
                         saveChanges(values)
                       }}
                     >
-                      {({ isSubmitting, handleChange, values }) => (
+                      {({ isSubmitting, handleChange }) => (
                         <Form>
                           <div className="space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <FormField
-                                name="name"
-                                label="Turf Name"
-                                icon={<Building />}
-                                value={values.name}
-                                onChange={handleChange}
-                              />
-
-                              <FormField
-                                name="email"
-                                label="Email"
-                                type="email"
-                                icon={<Mail />}
-                                value={values.email}
-                                onChange={handleChange}
-                                readOnly
-                              />
-
-                              <FormField
-                                name="phone"
-                                label="Phone Number"
-                                icon={<Phone />}
-                                value={values.phone}
-                                onChange={handleChange}
-                              />
-
-                              <FormField
-                                name="courtSize"
-                                label="Court Size"
-                                icon={<Ruler />}
-                                placeholder="e.g., 40x20 meters"
-                                value={values.courtSize}
-                                onChange={handleChange}
-                              />
-
-                              <FormField
-                                name="pricePerHour"
-                                label="Price per Hour (₹)"
-                                type="number"
-                                icon={<DollarSign />}
-                                placeholder="1000"
-                                value={values.pricePerHour}
-                                onChange={handleChange}
-                              />
-
+                              <FormField name="name" label="Turf Name" icon={<Building />} />
+                              <FormField name="email" label="Email" type="email" icon={<Mail />} readOnly />
+                              <FormField  name="phone" label="Phone Number" icon={<Phone />}/>
+                              <FormField name="courtSize" label="Court Size" icon={<Ruler />} placeholder="e.g., 40x20 meters" />
                               <div className="md:col-span-2">
-                                <FormField
-                                  name="description"
-                                  label="Description"
-                                  as="textarea"
-                                  placeholder="Describe your turf..."
-                                  rows={3}
-                                  value={values.description}
-                                  onChange={handleChange}
-                                />
+                                <FormField name="address" label="Address" />
                               </div>
-
-                              <div className="md:col-span-2">
-                                <FormField
-                                  name="address"
-                                  label="Address"
-                                  value={values.address}
-                                  onChange={handleChange}
-                                />
-                              </div>
-
-                              <FormField
-                                name="city"
-                                label="City"
-                                value={values.city}
-                                onChange={handleChange}
-                              />
-
-                              <FormField
-                                name="state"
-                                label="State"
-                                value={values.state}
-                                onChange={handleChange}
-                              />
+                              <FormField name="city" label="City" />
+                              <FormField name="state" label="State" />
 
                               <div className="md:col-span-2">
                                 <MapLocationPicker
@@ -332,14 +249,6 @@ export default function TurfDetails() {
                                 <p className="text-sm text-gray-500">Court Size</p>
                               </div>
                             </div>
-
-                            <div className="flex items-start">
-                              <DollarSign className="h-5 w-5 text-green-600 mr-3 mt-0.5" />
-                              <div>
-                                <p className="font-medium text-gray-900">₹{formData.pricePerHour}/hour</p>
-                                <p className="text-sm text-gray-500">Pricing</p>
-                              </div>
-                            </div>
                           </div>
                         </div>
 
@@ -406,7 +315,6 @@ export default function TurfDetails() {
                   {editMode && (
                     <div className="flex space-x-4 pt-6 border-t mt-6">
                       <Button
-                        onClick={saveChanges}
                         disabled={isSubmitting}
                         className="bg-green-600 hover:bg-green-700 px-8"
                       >
@@ -459,7 +367,6 @@ export default function TurfDetails() {
                   {editMode && (
                     <div className="flex space-x-4 pt-6 border-t mt-6">
                       <Button
-                        onClick={saveChanges}
                         disabled={isSubmitting}
                         className="bg-green-600 hover:bg-green-700 px-8"
                       >

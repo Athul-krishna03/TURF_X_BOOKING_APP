@@ -5,12 +5,8 @@ export interface ChatRoom {
     name: string
     imageUrl: string
     status: "active" | "inactive"
-    updatedAt: {
-        $date: string
-    }
-    createdAt: {
-        $date: string
-    }
+    updatedAt: Date
+    createdAt: Date
 }
 
 export interface Message {

@@ -13,6 +13,7 @@ import PhotoUpload from "../turf/turfDetialsComponents/photo-upload"
 import AmenitiesSelector from "../turf/turfDetialsComponents/amenities-selector"
 import MapLocationPicker from "../turf/turfDetialsComponents/map-location-picker"
 import FormField from "../turf/turfDetialsComponents/form-field"
+import GamesSelector from "../turf/turfDetialsComponents/Game-selector"
 
 interface SignupFormProps {
   onSubmit: (values: TurfFormValues, formikHelpers: { setSubmitting: (isSubmitting: boolean) => void }) => void
@@ -49,6 +50,7 @@ const TurfRegisterForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
             pricePerHour: "",
             isBlocked: false,
             aminities: [],
+            games:[],
             turfPhotos: [],
             turfPhotoUrls: [],
             location: {
@@ -109,16 +111,6 @@ const TurfRegisterForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
 
                     <FormField name="courtSize" label="Court Size" placeholder="e.g., 40x20 meters" required />
 
-                    <FormField
-                      name="pricePerHour"
-                      label="Price per Hour (₹)"
-                      type="number"
-                      placeholder="1000"
-                      required
-                    />
-
-                    <div className="space-y-2">
-                      <div className="grid grid-cols-2 gap-3">
                         <FormField
                           name="password"
                           label="Password"
@@ -136,8 +128,6 @@ const TurfRegisterForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
                           icon={<Lock />}
                           required
                         />
-                      </div>
-                    </div>
                   </div>
 
                   <FormField
@@ -202,8 +192,6 @@ const TurfRegisterForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Photo Upload */}
               <PhotoUpload
                 photos={values.turfPhotos}
                 photoUrls={values.turfPhotoUrls}
@@ -218,6 +206,10 @@ const TurfRegisterForm: React.FC<SignupFormProps> = ({ onSubmit }) => {
                 selectedAmenities={values.aminities}
                 onAmenitiesChange={(amenities) => setFieldValue("aminities", amenities)}
                 title="Amenities & Facilities"
+              />
+              <GamesSelector 
+              selectedGames={values.games} 
+              onGamesChange={(games) => setFieldValue("games", games)}
               />
 
               {/* Submit Button */}

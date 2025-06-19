@@ -50,7 +50,10 @@ export class JoinGameUseCase implements IJoinGameUseCase{
 
             //joining chat room
             const chatRoom = await this._chatRoomRepo.findByGameId(booking.id);
-            await this._chatRoomRepo.addUserToChatRoom(chatRoom?.id, data.userId as string);
+            if(chatRoom){
+                await this._chatRoomRepo.addUserToChatRoom(chatRoom?.id, data.userId as string);
+            }
+            
 
             if(!walletUpdate || !adminWalletUpdate){
                 throw new Error("Wallet not updated for turf or admin");

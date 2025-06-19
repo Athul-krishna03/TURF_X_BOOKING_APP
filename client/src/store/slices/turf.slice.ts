@@ -20,7 +20,15 @@ export interface updateTurfProfilePayload{
     email:string;
     turfPhotos:string[];
     aminities:string[];
-    location:object
+    location:{
+        address: string;
+        city: string;
+        state?: string;
+        coordinates: {
+            type:string,
+            coordinates:[number,number]
+        };
+    };
 }
 export const updateTurfDetails = createAsyncThunk<Turf,updateTurfProfilePayload,{rejectValue:string}>(
     "turf/updateProfile",

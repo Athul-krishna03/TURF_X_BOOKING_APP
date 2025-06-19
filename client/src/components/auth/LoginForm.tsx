@@ -24,9 +24,9 @@ const FormikLoginForm: React.FC<FormikLoginFormProps> = ({ onSubmit, onGoogleLog
 
   return (
     <div className="max-w-md w-full">
-      <h1 className="text-3xl font-bold text-center mb-2 text-white">
+      <h1 className="text-4xl font-bold text-center mb-2 text-green">
       {userType === "admin" ? "Admin Login" :
-      userType === "turf" ? "Turf Owner Login" :
+      userType === "turf" ? "Turf Login" :
       "Sign in to your account"}
       </h1>
       <p className="text-center mb-8 text-[#8E9196]">

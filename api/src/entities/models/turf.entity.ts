@@ -14,6 +14,7 @@ export interface ITurfEntity{
     aminities?:string[];
     turfPhotos:string[];
     courtSize:string;
+    games?:string[];
     location?: {
         address: string;
         city: string;

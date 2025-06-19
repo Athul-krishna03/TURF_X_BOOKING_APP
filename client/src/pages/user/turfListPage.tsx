@@ -20,7 +20,7 @@ export default function TurfList() {
     setIsSidebarExpanded(!isSidebarExpanded);
   };
 
-  const limit = 10;
+  const limit = 4;
   const [searchQuery, setSearchQuery] = useState("");
   const [filterOption , setFilterOption] = useState("")
   const [debouncedSearch, setDebouncedSearch] = useState(searchQuery);
@@ -43,7 +43,7 @@ export default function TurfList() {
           })
         },
         (err) => {
-          setError("Location permission denied or unavailable")
+          setError(err.message || "Location permission denied or unavailable")
         },
         {
           enableHighAccuracy: true,
@@ -130,7 +130,7 @@ export default function TurfList() {
 
           {/* Turf Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {isLoading && 
+            {isLoading  || error && 
                 <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
                   <div className="bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-700/50">
                     <div className="flex flex-col items-center space-y-4">
