@@ -60,10 +60,9 @@ if(!slot) return <div className="min-h-screen bg-gradient-to-b from-gray-900 to-
           <div className="text-gray-400">Loading slot details...</div>
         </div>
       </div>
- 
-  const platformFee = +((Number(slot.price) * Number(duration) * 0.05).toFixed(2)); // 0.05%
+  const platformFee = +((Number(slot.price) * Number(duration) * 0.05).toFixed(2));
   const grandTotal = +(Number(slot.price) * Number(duration) + platformFee).toFixed(2); 
-   const maxPlayers = 10 // You can set this based on your business logic or slot data
+  const maxPlayers = 10;
   const perPlayerPrice = Math.ceil(grandTotal/ playerCount)
   
   return (
@@ -98,20 +97,6 @@ if(!slot) return <div className="min-h-screen bg-gradient-to-b from-gray-900 to-
       <div className="bg-gray-800 p-5 rounded-lg border border-gray-700 space-y-4">
         <p className="text-sm text-gray-300 mb-2 font-semibold">Choose Payment Option:</p>
         <div className="flex flex-col gap-4">
-          {/* <label className="flex items-center justify-between cursor-pointer bg-gray-900 p-3 rounded-md border border-gray-700 hover:border-green-500">
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                value="full"
-                checked={paymentMode === "full"}
-                onChange={() => setPaymentMode("full")}
-                className="form-radio accent-green-500"
-              />
-              <span className="text-white">Book With Full Payment</span>
-            </div>
-            <span className="text-green-400 font-semibold">₹{slot.price.toLocaleString()}</span>
-          </label> */}
-
           <label className="flex flex-col space-y-2 bg-gray-900 p-3 rounded-md border border-gray-700 hover:border-green-500">
             <div className="flex items-center gap-2">
               <input

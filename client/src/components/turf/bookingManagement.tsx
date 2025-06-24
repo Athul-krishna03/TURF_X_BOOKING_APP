@@ -10,6 +10,7 @@ import HostedGameCard from "./hostedGame";
 import { Booking, SharedBooking } from "../../types/Type";
 import { toast } from "sonner";
 import { CardLoadingSkeleton } from "../ui/loading/loading-skeletons";
+import { Pagination1 } from "../admin/Pagination";
 
 export type TurfBookingResponse = {
   normal: Booking[];
@@ -18,11 +19,14 @@ export type TurfBookingResponse = {
 
 const BookingManagement = () => {
   const [tab, setTab] = useState("normal");
+  const [normalBookingPage,setNormalBookingPage]= useState(1);
+  const [hostedBookingPage,setHostedBookingPage] = useState(1)
   const [bookingData, setBookingData] = useState<TurfBookingResponse>({
     normal: [],
     hosted: [],
   });
   const [isLoading, setIsLoading] = useState(true);
+  const ITEMS_PER_PAGE = 3;
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -39,7 +43,16 @@ const BookingManagement = () => {
 
     fetchBookings();
   }, []);
+  
+  const normalBookingPaginated = bookingData.normal.slice(
+    (normalBookingPage-1) * ITEMS_PER_PAGE,
+    normalBookingPage*ITEMS_PER_PAGE
+  )
 
+  const hostedGamesPaginated = bookingData.hosted.slice(
+    (hostedBookingPage-1)*ITEMS_PER_PAGE,
+    normalBookingPage*ITEMS_PER_PAGE
+  )
   const handleCancelBooking = async (bookingId: string,bookingType:string) => {
     if(bookingType =="single"){
       try {
@@ -115,9 +128,19 @@ const BookingManagement = () => {
               <p className="text-gray-500">No normal bookings found.</p>
             ) : (
               <div className="space-y-4">
-                {bookingData.normal.map((booking) => (
+                {normalBookingPaginated.map((booking) => (
                   <NormalBookingCard key={booking.id} booking={booking} onCancel={handleCancelBooking}/>
                 ))}
+                <Pagination1
+                    currentPage={normalBookingPage}
+                    totalPages={Math.ceil(bookingData.normal.length / ITEMS_PER_PAGE)}
+                    onPagePrev={() => setNormalBookingPage((p) => Math.max(p - 1, 1))}
+                    onPageNext={() =>
+                      setNormalBookingPage((p) =>
+                        Math.min(p + 1, Math.ceil(bookingData.normal.length / ITEMS_PER_PAGE))
+                      )
+                    }
+                />
               </div>
             )}
           </TabsContent>
@@ -128,13 +151,23 @@ const BookingManagement = () => {
               <p className="text-gray-500">No hosted games found.</p>
             ) : (
               <div className="space-y-4">
-                {bookingData.hosted.map((game) => (
+                {hostedGamesPaginated.map((game) => (
                   <HostedGameCard 
                   key={game.id} 
                   game={game}
                   onCancel={handleCancelBooking}
                   />
                 ))}
+                <Pagination1
+                    currentPage={hostedBookingPage}
+                    totalPages={Math.ceil(bookingData.hosted.length / ITEMS_PER_PAGE)}
+                    onPagePrev={() => setHostedBookingPage((p) => Math.max(p - 1, 1))}
+                    onPageNext={() =>
+                      setHostedBookingPage((p) =>
+                        Math.min(p + 1, Math.ceil(bookingData.hosted.length / ITEMS_PER_PAGE))
+                      )
+                    }
+                />
               </div>
             )}
           </TabsContent>

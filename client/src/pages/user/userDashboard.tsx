@@ -150,7 +150,7 @@ export default function TurfXDashboard() {
               <h2 className="text-3xl font-bold">
                 Popular Venues <span className="bg-gradient-to-r from-green-400 to-green-500 bg-clip-text text-transparent">Near You</span>
               </h2>
-              <button className="text-green-400 hover:text-green-300 flex items-center transition-colors">
+              <button className="text-green-400 hover:text-green-300 flex items-center transition-colors"  onClick={()=>navigate("/user/turfList")}>
                 View All <ChevronRight size={18} className="ml-1" />
               </button>
             </div>

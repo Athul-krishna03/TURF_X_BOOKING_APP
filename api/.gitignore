@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.env
+turfx-55f2e-firebase-adminsdk-fbsvc-856587f9d7.json
+*-firebase-adminsdk-*.json

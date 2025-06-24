@@ -18,7 +18,6 @@ export class GenerateTokenUseCase implements IGenerateTokenUseCase{
 
         const accessToken = this.tokenService.generateAccessToken(payload);
         const refreshToken = this.tokenService.generateRefreshToken(payload);
-          
         await this.refreshTokenRepository.save({
             token:refreshToken,
             userType:role as TRole,

@@ -47,7 +47,10 @@ export function ChatRoomsList({
   }
   return (
     <div className="divide-y divide-gray-700">
-      {rooms.map((room) => {
+      {rooms
+        .slice() 
+        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+        .map((room) => {
         const unreadCount = getUnreadCount(room)
         const lastMessage = getLastMessage(room)
         const lastUpdated = formatTimestamp(room.updatedAt)

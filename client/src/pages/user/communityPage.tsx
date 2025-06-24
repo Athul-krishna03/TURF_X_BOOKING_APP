@@ -144,7 +144,7 @@ export default function CommunityPage() {
     return "Click to load messages";
   };
 
-  const getUnreadCount = (room: ChatRoom): number => {
+  const getUnreadCount = (): number => {
     return 0;
   };
 

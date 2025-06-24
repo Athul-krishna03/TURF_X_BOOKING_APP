@@ -47,7 +47,10 @@ export default function TurfDashboard() {
       weekly: turfDashBoardData.revenueStats?.weekly || [],
       monthly: turfDashBoardData.revenueStats?.monthly || [],
     },
-    recentBookings: turfDashBoardData.recentBookings || [],
+    recentBookings: (turfDashBoardData.recentBookings || []).map(booking => ({
+      ...booking,
+      id: String(booking.id),
+    })),
   }
 
   return (

@@ -36,10 +36,9 @@ export const useUpdateturfstatus = (currentPage:number,limit:number,search:strin
             successToast(data.message)
         },
         onError: (error: any, _, context) => {
-            // if (context?.previousData) {
-            //     queryClient.setQueryData(context.queryClient, context.previousData);
-            // }
-            // errorToast(error.response?.data?.message || "An error occurred");
+            if (context?.previousData) {
+            }
+            errorToast(error.response?.data?.message || "An error occurred");
         }
     })
 }

@@ -32,7 +32,7 @@ export class SendMessageUseCase implements ISendMessageUseCase{
     const chatRoom = await this._chatRoomRepo.findById(chatRoomId);
     const senderUser = await this._clientRepo.findById(userId)
     console.log("chatRoom in sendMessageUseCase",chatRoom)
-    for (const ids of chatRoom?.users || []) {
+    for (const ids of chatRoom?.users || []) { 
         const user = await this._clientRepo.findById(ids);
         console.log("user in sendMessageUseCase",user)
         if (user?.id && user.id !== userId) {

@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Sidebar } from "../../components/layout/Sidebar";
 import { Menu, TrendingUp } from "lucide-react";
 import { BalanceCard } from "../../components/wallet/balanceCard";
-import { QuickActions } from "../../components/wallet/quickAction";
 import { TransactionFilter, TransactionHistory } from "../../components/wallet/tranctionSection";
 import { getWalletData } from "../../services/user/userServices";
+import { Pagination1 } from "../../components/admin/Pagination";
 
 type Transaction = {
     type: 'credit' | 'debit';
@@ -14,7 +14,7 @@ type Transaction = {
     description: string;
 };
 
-type WalletData = {
+export type WalletData = {
     userId: string;
     userType: string;
     balance: number;
@@ -23,6 +23,8 @@ type WalletData = {
 
 const WalletPage =  () => {
     const [showBalance, setShowBalance] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 1;
     const [filter, setFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
@@ -45,17 +47,21 @@ const WalletPage =  () => {
 
         fetchWalletData();
     }, []);
-    const handleAddMoney = () => {
-        console.log('Add money clicked');
-    };
-
-    const handleSendMoney = () => {
-        console.log('Send money clicked');
-    };
-
     const toggleBalance = () => {
         setShowBalance(!showBalance);
     };
+    const filteredTransactions = walletData?.transaction
+        ?.filter((txn) =>
+            (filter === 'all' || txn.type === filter) &&
+            txn.description.toLowerCase().includes(searchTerm.toLowerCase())
+        ) || [];
+
+    const totalPages = Math.ceil(filteredTransactions.length / pageSize);
+
+    const paginatedTransactions = filteredTransactions.slice(
+        (currentPage - 1) * pageSize,
+        currentPage * pageSize
+    );
 
     return (
         <div className="flex h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white overflow-hidden">
@@ -91,12 +97,6 @@ const WalletPage =  () => {
                                         toggleBalance={toggleBalance}
                                     />
                                 </div>
-                                {/* <div>
-                                    <QuickActions 
-                                        onAddMoney={handleAddMoney}
-                                        onSendMoney={handleSendMoney}
-                                    />
-                                </div> */}
                             </div>
 
                             {/* Transaction History */}
@@ -119,10 +119,19 @@ const WalletPage =  () => {
                                 />
 
                                 <TransactionHistory 
-                                    transactions={walletData?.transaction ?? []}
+                                    transactions={paginatedTransactions}
                                     filter={filter}
                                     searchTerm={searchTerm}
                                 />
+
+                                {totalPages > 1 && (
+                                    <Pagination1
+                                        currentPage={currentPage}
+                                        totalPages={totalPages}
+                                        onPagePrev={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                        onPageNext={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>

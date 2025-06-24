@@ -42,7 +42,6 @@ export class BookingSlotUseCase implements IBookingSlotUseCase {
       };
       console.log("data inside usecase", data);
       if(paymentType == "single"){
-        
         const saveData = await this.bookingRepo.save(data);
         return saveData as IBookingEntity;
       }else if(paymentType == "shared"){

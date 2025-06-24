@@ -5,6 +5,7 @@ import SlotManager from "../components/turf/SlotMangement/SlotManagement";
 import TurfDetails from "../components/turf/turfDetials";
 import BookingManagement from "../components/turf/bookingManagement";
 
+
 export function TurfRoutes() {
   console.log("inside turf route");
 

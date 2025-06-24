@@ -14,6 +14,7 @@ import { adminLogout } from "../../store/slices/admin.slice";
 import { useDispatch } from "react-redux";
 import { useadminLogout } from "../../hooks/admin/useAdminLogout";
 import AdminDashboardComponent from "../../components/admin/AdminDashboard";
+import RevenueManagement from "../../components/admin/RevenueManagement";
 
 
 const AdminDashboard = () => {
@@ -75,6 +76,14 @@ const AdminDashboard = () => {
                 <CalendarDays className="h-5 w-5 mr-3" />
                 Turf Requests
                 </a>
+                <a 
+                href="#" 
+                className={`flex items-center px-4 py-3 mb-2 rounded-lg ${activeMenu === "revenue" ? "bg-green-600 text-white" : "text-gray-300 hover:bg-gray-800"}`}
+                onClick={() => setActiveMenu("revenue")}
+                >
+                <CalendarDays className="h-5 w-5 mr-3" />
+                Revenue Management
+                </a>
             </nav>
             </div>
             <div className="p-4 border-t border-gray-700">
@@ -100,6 +109,8 @@ const AdminDashboard = () => {
                 {activeMenu === "turfs" && "Turf Management"}
                 {activeMenu === "request" && "Request Management"}
                 {activeMenu === "analytics" && "Analytics & Reports"}
+                {activeMenu === "revenue" && "Revenue Management"}
+
                 </h1>
             </div>
             </header>
@@ -122,6 +133,9 @@ const AdminDashboard = () => {
 
             {activeMenu === "request" && (
                 <TurfRequestManagement/>
+            )}
+            {activeMenu === "revenue" && (
+                <RevenueManagement/>
             )}
             </main>
         </div>

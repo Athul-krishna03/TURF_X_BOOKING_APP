@@ -25,8 +25,14 @@ import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Sidebar } from "../../components/layout/Sidebar";
+import { Pagination1 } from "../../components/admin/Pagination";
 
 export default function BookingsPage() {
+  const [upcomingPage, setUpcomingPage] = useState(1);
+  const [pastPage, setPastPage] = useState(1);
+  const [joinedUpcomingPage, setJoinedUpcomingPage] = useState(1);
+  const [joinedPastPage, setJoinedPastPage] = useState(1);
+  const ITEMS_PER_PAGE = 3;
   const user = useSelector((state: any) => state.user.user)
   const [activeTab, setActiveTab] = useState("upcoming");
   const [joinedActiveTab, setJoinedActiveTab] = useState("upcoming");
@@ -69,6 +75,23 @@ export default function BookingsPage() {
 
     fetchBookings();
   }, []);
+
+  const paginatedUpcoming = bookingData.upcoming.slice(
+  (upcomingPage - 1) * ITEMS_PER_PAGE,
+  upcomingPage * ITEMS_PER_PAGE
+  );
+  const paginatedPast = bookingData.past.slice(
+    (pastPage - 1) * ITEMS_PER_PAGE,
+    pastPage * ITEMS_PER_PAGE
+  );
+  const paginatedJoinedUpcoming = bookingData.joinedGames.upcoming.slice(
+    (joinedUpcomingPage - 1) * ITEMS_PER_PAGE,
+    joinedUpcomingPage * ITEMS_PER_PAGE
+  );
+  const paginatedJoinedPast = bookingData.joinedGames.past.slice(
+    (joinedPastPage - 1) * ITEMS_PER_PAGE,
+    joinedPastPage * ITEMS_PER_PAGE
+  );
 
   const handleCancel = (booking: BookingType | JoinedGameBooking, type: string) => {
     
@@ -215,7 +238,7 @@ export default function BookingsPage() {
             </TabsList>
 
             <TabsContent value="upcoming" className="space-y-6">
-              {bookingData.upcoming.length === 0 ? (
+              {paginatedUpcoming.length === 0 ? (
                 <div className="text-center py-12 bg-gray-900 rounded-xl border border-gray-800 p-8">
                   <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-800 mb-4">
                     <CalendarIcon size={36} className="text-gray-400" />
@@ -240,7 +263,7 @@ export default function BookingsPage() {
                 </div>
               ) : (
                 <div className="grid gap-6">
-                  {bookingData.upcoming.map((booking:BookingType) => (
+                  {paginatedUpcoming.map((booking:BookingType) => (
                     <BookingCard
                       key={booking.id}
                       booking={booking}
@@ -249,12 +272,24 @@ export default function BookingsPage() {
                       type="normal"
                     />
                   ))}
+
+                  <Pagination1
+                    currentPage={upcomingPage}
+                    totalPages={Math.ceil(bookingData.upcoming.length / ITEMS_PER_PAGE)}
+                    onPagePrev={() => setUpcomingPage((p) => Math.max(p - 1, 1))}
+                    onPageNext={() =>
+                      setUpcomingPage((p) =>
+                        Math.min(p + 1, Math.ceil(bookingData.upcoming.length / ITEMS_PER_PAGE))
+                      )
+                    }
+                  />
                 </div>
+                
               )}
             </TabsContent>
 
             <TabsContent value="past" className="space-y-6">
-              {bookingData.past.length === 0 ? (
+              {paginatedPast.length === 0 ? (
                 <div className="text-center py-12 bg-gray-900 rounded-xl border border-gray-800 p-8">
                   <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-800 mb-4">
                     <Clock size={36} className="text-gray-400" />
@@ -277,7 +312,7 @@ export default function BookingsPage() {
                 </div>
               ) : (
                 <div className="grid gap-6">
-                  {bookingData.past.map((booking:BookingType) => (
+                  {paginatedPast.map((booking:BookingType) => (
                     <BookingCard
                       key={booking.id}
                       booking={booking}
@@ -286,6 +321,17 @@ export default function BookingsPage() {
                       type="normal"
                     />
                   ))}
+                  <Pagination1
+                    currentPage={pastPage}
+                    totalPages={Math.ceil(bookingData.past.length / ITEMS_PER_PAGE)}
+                    onPagePrev={() => setPastPage((p) => Math.max(p - 1, 1))}
+                    onPageNext={() =>
+                      setPastPage((p) =>
+                        Math.min(p + 1, Math.ceil(bookingData.past.length / ITEMS_PER_PAGE))
+                      )
+                    }
+                  />
+
                 </div>
               )}
             </TabsContent>
@@ -347,7 +393,7 @@ export default function BookingsPage() {
                   </TabsList>
 
                   <TabsContent value="upcoming" className="space-y-6">
-                    {bookingData.joinedGames.upcoming.length === 0 ? (
+                    {paginatedJoinedUpcoming.length === 0 ? (
                       <div className="text-center py-8 bg-gray-800 rounded-lg border border-gray-700 p-6">
                         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-700 mb-3">
                           <CalendarClock size={24} className="text-gray-400" />
@@ -359,7 +405,7 @@ export default function BookingsPage() {
                       </div>
                     ) : (
                       <div className="grid gap-6">
-                        {bookingData.joinedGames.upcoming.map((game) => (
+                        {paginatedJoinedUpcoming.map((game) => (
                           <BookingCard
                             key={game.id}
                             booking={game}
@@ -368,12 +414,23 @@ export default function BookingsPage() {
                             type="joined"
                           />
                         ))}
+                        <Pagination1
+                          currentPage={joinedUpcomingPage}
+                          totalPages={Math.ceil(bookingData.joinedGames.upcoming.length / ITEMS_PER_PAGE)}
+                          onPagePrev={() => setJoinedUpcomingPage((p) => Math.max(p - 1, 1))}
+                          onPageNext={() =>
+                            setJoinedUpcomingPage((p) =>
+                              Math.min(p + 1, Math.ceil(bookingData.joinedGames.upcoming.length / ITEMS_PER_PAGE))
+                            )
+                          }
+                        />
+
                       </div>
                     )}
                   </TabsContent>
 
                   <TabsContent value="past" className="space-y-6">
-                    {bookingData.joinedGames.past.length === 0 ? (
+                    {paginatedJoinedPast.length === 0 ? (
                       <div className="text-center py-8 bg-gray-800 rounded-lg border border-gray-700 p-6">
                         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-700 mb-3">
                           <History size={24} className="text-gray-400" />
@@ -385,7 +442,7 @@ export default function BookingsPage() {
                       </div>
                     ) : (
                       <div className="grid gap-6">
-                        {bookingData.joinedGames.past.map((game) => (
+                        {paginatedJoinedPast.map((game) => (
                           <BookingCard
                             key={game.id}
                             booking={game}
@@ -394,6 +451,17 @@ export default function BookingsPage() {
                             type="joined"
                           />
                         ))}
+
+                        <Pagination1
+                          currentPage={joinedPastPage}
+                          totalPages={Math.ceil(bookingData.joinedGames.past.length / ITEMS_PER_PAGE)}
+                          onPagePrev={() => setJoinedPastPage((p) => Math.max(p - 1, 1))}
+                          onPageNext={() =>
+                            setJoinedPastPage((p) =>
+                              Math.min(p + 1, Math.ceil(bookingData.joinedGames.past.length / ITEMS_PER_PAGE))
+                            )
+                          }
+                        />
                       </div>
                     )}
                   </TabsContent>

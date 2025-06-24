@@ -19,7 +19,7 @@ export class BookingRepository implements IBookingRepository {
     }
     
     async getAllBooking(): Promise<IBookingEntity[]> {
-        const result = await BookingModel.find().sort({ createdAt: -1 });
+        const result = await BookingModel.find().populate("userId").sort({ createdAt: -1 });
         return result as IBookingEntity[];
     }
 

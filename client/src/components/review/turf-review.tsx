@@ -37,7 +37,7 @@ export interface IReviewEntity {
 }
 export default function TurfReviews({ turfId, turfName }: TurfReviewsProps) {
 
-   const { data: reviews = [], addReview, isAddingReview } = useReviews(turfId)
+   const { data: reviews = [], addReview } = useReviews(turfId)
    const user = useSelector((state:any)=>state.user.user)
 
     const [showAddReview, setShowAddReview] = useState(false)

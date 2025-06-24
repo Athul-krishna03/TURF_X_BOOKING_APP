@@ -35,10 +35,10 @@ export const useUpdateUserStatus = (currentPage:number,limit:number,search:strin
             successToast(data.message);
         },
         onError: (error: any, _, context) => {
-            // if (context?.previousData) {
-            //     queryClient.setQueryData(context., context.previousData);
-            // }
-            // errorToast(error.response?.data?.message || "An error occurred");
+            if (context?.previousData) {
+                
+            }
+            errorToast(error.response?.data?.message || "An error occurred");
         }
     })
 }

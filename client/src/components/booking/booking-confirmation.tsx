@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 type BookingConfirmationProps = {
   date: string;
+  games:string[];
   slot: Slot;
   availableSlots: Slot[];
   duration: number;
@@ -22,6 +23,7 @@ type BookingConfirmationProps = {
 
 export default function BookingConfirmation({
   date,
+  games,
   slot,
   availableSlots,
   duration,
@@ -36,6 +38,7 @@ export default function BookingConfirmation({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<"book" | "host">("book");
+  const [game,setGame] = useState("Football")
   const navigate = useNavigate();
 
   const handleConfirmClick = () => {
@@ -146,6 +149,25 @@ export default function BookingConfirmation({
               </p>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="bg-gray-800/70 p-5 rounded-lg border border-gray-700 space-y-4">
+        <div className="flex flex-wrap gap-6">
+          {games.map((val) => (
+            <button
+              key={val}
+              type="button"
+              onClick={() => setGame(val)}
+              className={cn(
+                "px-4 py-2 rounded-lg border text-sm font-medium transition-all",
+                game === val
+                  ? "bg-green-500 text-white border-green-600"
+                  : "bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600"
+              )}
+            >
+              {val}
+            </button>
+          ))}
         </div>
       </div>
 

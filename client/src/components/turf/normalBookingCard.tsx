@@ -39,7 +39,7 @@ export default function NormalBookingCard({ booking, onCancel }: NormalBookingCa
               <User size={18} className="text-green-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">{booking.userName}</h3>
+              <h3 className="font-semibold text-gray-900">{_doc.userId.name}</h3>
               <p className="text-sm text-gray-600">Customer Booking</p>
             </div>
           </div>

@@ -2,18 +2,14 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchHostedGames, sharedSlotJoin } from "../../services/user/userServices"; // Import sharedSlotJoin
-import {
-  Calendar, Clock, MapPin, Users, DollarSign, ChevronRight, Search,
-  ArrowLeft
-} from "lucide-react";
+import { Calendar, Clock, MapPin, Users, DollarSign, ChevronRight, Search,ArrowLeft} from "lucide-react";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import HostedGameDialog from "./HostGameDialog";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useSelector } from "react-redux";
+
 
 export interface HostedGame {
   userIds: any[];
@@ -36,13 +32,10 @@ export interface HostedGame {
 
 const HostedGamesList = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [sportFilter, setSportFilter] = useState<string>("all");
   const [selectedGame, setSelectedGame] = useState<HostedGame | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const user = useSelector((state: any) => state.user.user); 
-
+  const queryClient = useQueryClient()
   const { data: hostedGames, isLoading } = useQuery({
     queryKey: ["hostedGames"],
     queryFn: fetchHostedGames,
@@ -52,13 +45,6 @@ const HostedGamesList = () => {
     mutationFn: ({ date, slotId, price }: { date: string; slotId: string; price: number }) =>
       sharedSlotJoin(date, slotId, price),
     onSuccess: () => {
-      // console.log("updatedDames data",updatedGame);
-      // queryClient.setQueryData(["hostedGames"], (oldData: HostedGame[] | undefined) => {
-      //   if (!oldData) return oldData;
-      //   return oldData.map((game) =>
-      //     game._id === updatedGame._id ? updatedGame : game
-      //   );
-      // });
       queryClient.invalidateQueries({queryKey:["hostedGames"]})
     },
     onError: () => {
@@ -75,9 +61,8 @@ const HostedGamesList = () => {
       game.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       game.hostName.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesSport = sportFilter === "all" || game.sportType === sportFilter;
 
-    return matchesSearch && matchesSport;
+    return matchesSearch;
   }) ?? [];
 
   const handleGameSelect = (game: HostedGame) => {
