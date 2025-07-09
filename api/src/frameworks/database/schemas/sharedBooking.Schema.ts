@@ -11,7 +11,7 @@ export const SharedBookingSchema = new Schema({
     type:Number,
     required: true
   },
-
+  game:{type:String,default:"Football"},
   walletContributions: {
     type: Map,
     of: Number,

@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 import { ISlotRepository } from "../../entities/repositoryInterface/turf/ISlotRepository";
 import { IGenerateSlotUseCase } from "../../entities/useCaseInterfaces/turf/IGenerateSlotUseCase";
 import { addDays, format } from "date-fns";
-import { ISlotEntity } from "../../entities/models/slot.entity";
 
 export interface ISlot{
     turfId:string,

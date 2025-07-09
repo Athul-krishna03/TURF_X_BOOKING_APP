@@ -6,6 +6,7 @@ import { IPaymentControllers } from "../../../entities/controllerInterfaces/Paym
 import { Request, Response } from "express";
 import { IRedisClient } from "../../../entities/services/IRedisClient";
 import { IPaymentService } from "../../../entities/services/IPaymentService";
+import { CustomRequest } from "../../middlewares/authMiddleware";
 
 
 
@@ -24,55 +25,64 @@ export  class PaymentController implements IPaymentControllers{
     }
     async createPaymentIntent(req: Request, res: Response): Promise<void> {
         try {
-            const {slotId,price} = req.body as {slotId:string,price:number};
-            if(!slotId){
-                const paymentIntent = await this._paymentService.createPaymentIntent(
-                    price
-                )
+            const { slotId, price, durarion } = req.body as {
+                slotId: string;
+                price: number;
+                durarion: number;
+            };
+            const userId = (req as CustomRequest).user.id;
 
-                res.json({ clientSecret: paymentIntent.clientSecret});
-                return
-            }
-            const lockKey = `slot_lock:${slotId}`;
-
-            const slot  = await this._slotRepo.findById(slotId);
-
-            if(!slot){
-                res.status(404).json({error:"Slot not found"});
+            if (!slotId) {
+                const paymentIntent = await this._paymentService.createPaymentIntent(price);
+                res.json({ clientSecret: paymentIntent.clientSecret });
                 return;
             }
 
-            const lockId = await this._redis.acquireLock(lockKey,30000);
-            console.log("lockid ",lockId);
+            const lockKey = `slot_lock:${slotId}`;
+            const slot = await this._slotRepo.findById(slotId);
 
-            if(!lockId){
-                res.status(400).json({error:"Slot is unavilable"})
-                return
+            if (!slot) {
+                res.status(404).json({ error: "Slot not found" });
+                return;
             }
-            
-            if(slot.isBooked){
-                await this._redis.releaseLock(lockKey,lockId);
-                res.status(400).json({error:"Slot already booked"});
-                return ;
+            const currentLockOwner = await this._redis.get(lockKey);
+            if (currentLockOwner && currentLockOwner !== userId) {
+                res.status(400).json({ error: "Slot is currently locked by another user" });
+                return;
             }
+            await this._redis.set(lockKey, userId, "PX", 30000);
+
+            if (slot.isBooked) {
+                const owner = await this._redis.get(lockKey);
+                if (owner === userId) {
+                    await this._redis.del(lockKey);
+                }
+
+                res.status(400).json({ error: "Slot already booked" });
+                return;
+            }
+
             try {
-                const paymentIntent = await this._paymentService.createPaymentIntent(
-                    price,slotId,
-                )
+                const paymentIntent = await this._paymentService.createPaymentIntent(price, slotId);
 
-                res.json({ clientSecret: paymentIntent.clientSecret, lockId });
-                return 
+                res.json({
+                    clientSecret: paymentIntent.clientSecret,
+                    lockId: userId,
+                });
+                return;
             } catch (err) {
-                if (lockId) {
-                    await this._redis.releaseLock(lockKey,lockId);
+                const owner = await this._redis.get(lockKey);
+                if (owner === userId) {
+                    await this._redis.del(lockKey);
                 }
                 console.error("PaymentIntent creation failed:", err);
                 res.status(500).json({ error: "Failed to create payment" });
-                return
+                return;
             }
         } catch (error) {
             console.error("PaymentIntent creation failed:", error);
             res.status(500).json({ error: "Failed to create payment" });
         }
     }
+
 }

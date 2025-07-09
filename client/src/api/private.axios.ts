@@ -4,6 +4,10 @@ import { userLogout } from "../store/slices/user.slice";
 import { adminLogout } from "../store/slices/admin.slice";
 import { turfLogout } from "../store/slices/turf.slice";
 import { toast } from "../hooks/useToast";
+import { ADMIN_ROUTES } from "../constants/admin_routes";
+import { TURF_ROUTES } from "../constants/turf_routes";
+import { USER_ROUTES } from "../constants/user_routes";
+import { URL_PART } from "../constants/route";
 
 export const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_PRIVATE_URL,
@@ -21,13 +25,13 @@ axiosInstance.interceptors.response.use(
         let role: string | "";
 
         switch (urlParse) {
-        case "_us":
+        case URL_PART.user:
             role = "user";
             break;
-        case "_ad":
+        case URL_PART.admin:
             role = "admin";
             break;
-        case "_ts":
+        case URL_PART.turf:
             role = "turf";
             break;
         default:
@@ -46,11 +50,11 @@ axiosInstance.interceptors.response.use(
             try {
             const refreshEndpoint =
                 role === "admin"
-                ? "/_ad/admin/refresh_token"
+                ? ADMIN_ROUTES.REFRESH_TOKEN
                 : role === "user"
-                ? "/_us/user/refresh-token"
+                ? USER_ROUTES.REFRESH_TOKEN
                 : role === "turf"
-                ? "/_ts/turf/refresh-token"
+                ? TURF_ROUTES.REFRESH_TOKEN
                 : "";
 
             await axiosInstance.post(refreshEndpoint);

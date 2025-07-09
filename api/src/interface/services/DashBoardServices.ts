@@ -57,7 +57,6 @@ export class DashBoardServices implements IDashBoardServices {
             const dateObj = new Date(wallet.date);
             const dayIndex = dateObj.getDay();
             weeklyRevenue[dayIndex] += wallet.amount || 0;
-            // Monthly
             if (dateObj.getFullYear() === new Date().getFullYear()) {
                 const monthIndex = dateObj.getMonth();
                 monthlyRevenue[monthIndex] += wallet.amount || 0;

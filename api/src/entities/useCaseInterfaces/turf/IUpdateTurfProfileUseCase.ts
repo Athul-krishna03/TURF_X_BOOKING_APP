@@ -1,4 +1,5 @@
-import { TurfProfileResponse } from "../../../shared/dtos/user.dto";
+
+import { TurfProfileResponse } from "../../../shared/responseTypes/turfProfileResponse";
 import { ITurfEntity } from "../../models/turf.entity";
 
 export interface IUpdateTurfProfileUseCase{

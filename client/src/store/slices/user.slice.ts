@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice,PayloadAction} from "@reduxjs/toolkit";
 import { User } from "../../types/Type";
-import { userAxiosInstance } from "../../api/client.axios";
+import { axiosInstance } from "../../api/private.axios";
 
 
 interface UserState{
@@ -20,7 +20,7 @@ export const updateUserProfile = createAsyncThunk<User,updateProfilePayload,{rej
     "user/updateProfile",
     async(profileData,{rejectWithValue})=>{
         try {
-            const response = await userAxiosInstance.patch('/_us/user/edit-profile',profileData);
+            const response = await axiosInstance.patch('/_us/user/edit-profile',profileData);
             console.log("edit profile response in thunk",response)
             return response.data.data;
         } catch (error:any) {

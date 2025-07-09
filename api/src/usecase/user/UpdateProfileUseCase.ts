@@ -18,19 +18,13 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
     
     const isExist = await this.clientRepo.findById(clientId);
     const isEmailEXist = await this.clientRepo.findByEmail(data?.email)
-    console.log("mail exist ",isEmailEXist?.email,data.email);
-    
-    if(isEmailEXist && isEmailEXist.email != data.email){
-      console.log("entered");
-      
+    if(isEmailEXist && isEmailEXist.email != data.email){  
       throw new CustomError(
         "user with same email exist",
         HTTP_STATUS.BAD_REQUEST
       )
       
     }
-    console.log("edit user exist",isExist);
-    console.log("edit user data",data)
     if (!isExist) {
       throw new CustomError(
         ERROR_MESSAGES.USER_NOT_FOUND,

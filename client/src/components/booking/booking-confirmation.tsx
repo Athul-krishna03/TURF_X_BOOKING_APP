@@ -61,7 +61,7 @@ export default function BookingConfirmation({
     if (selectedOption === "book") {
       setIsModalOpen(true);
     } else {
-      navigate(`/user/hostGame/${slot._id}/${duration}`);
+      navigate(`/user/hostGame/${slot._id}/${duration}/${game}`);
     }
   };
 
@@ -225,6 +225,7 @@ export default function BookingConfirmation({
         <PaymentModal
           date={date}
           slot={slot}
+          game={game}
           duration={duration}
           currency={currency}
           totalPrice={grandTotal}

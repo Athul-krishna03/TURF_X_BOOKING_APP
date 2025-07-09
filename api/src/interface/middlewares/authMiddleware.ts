@@ -23,11 +23,11 @@ const extractToken = (req:Request):{access_token:string,refresh_token:string} | 
     const pathSegment = req.path.split("/");
     const routeIndex = pathSegment.indexOf("");
     if(routeIndex !== -1 && pathSegment[routeIndex + 1]){
-     const userType = pathSegment[routeIndex + 1];
-     return{
-        access_token:req.cookies[`${userType}_access_token`],
-        refresh_token:req.cookies[`${userType}_refresh_token`]
-     };
+        const userType = pathSegment[routeIndex + 1];
+        return{
+            access_token:req.cookies[`${userType}_access_token`],
+            refresh_token:req.cookies[`${userType}_refresh_token`]
+        };
     }
     return null;
 }
@@ -57,7 +57,6 @@ try {
         token.access_token,
     )as CustomJwtPayload;
     if(!user || !user.id){
-        console.log("this 1 si triggering");
         res.status(HTTP_STATUS.UNAUTHORIZED).json({message:ERROR_MESSAGES.TOKEN_EXPIRED})
     return;
     }
@@ -68,7 +67,6 @@ try {
     };
     next();
 } catch (error:any) {
-    console.log("secodn is, ",error)
     if(error.name === "TokenExpiredError"){
     res
     .status(HTTP_STATUS.UNAUTHORIZED)

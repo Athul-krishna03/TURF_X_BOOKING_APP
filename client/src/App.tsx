@@ -9,6 +9,7 @@ import TurfRegistrationForm from "./pages/Turf/TurfRegistration";
 import TurfLoginPage from "./pages/Turf/TurfLogin";
 import { TurfRoutes } from "./routes/TurfRoutes";
 import UnauthorizedPage from "./pages/common/unauthorizedPage";
+import ResetPasswordPage from "./pages/common/ResetPasswordPage";
 
 export default function App() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="/admin/*" element={<AdminRoutes />} />
 
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage/>}/>
         </Routes>
       </BrowserRouter>
     </>

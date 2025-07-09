@@ -20,11 +20,7 @@ export class LoginTurfUseCase implements ILoginTurfUseCase{
         }
     }
     async execute(user: LoginUserDTO): Promise<Partial<ITurfEntity>> {
-        console.log(user.role);
-        
         const strategy = this.strategies[user.role];
-        console.log("strategy",strategy);
-        
         if(!strategy){
             throw new CustomError(
                 ERROR_MESSAGES.INVALID_ROLE,

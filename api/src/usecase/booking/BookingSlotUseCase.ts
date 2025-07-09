@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 import { IBookingEntity } from "../../entities/models/booking.entity";
 import { IBookingRepository } from "../../entities/repositoryInterface/booking/IBookingRepository";
 import { IBookingSlotUseCase } from "../../entities/useCaseInterfaces/IBookingSlotUseCase";
-import { ISlotEntity } from "../../entities/models/slot.entity";
 import { generateBookingId } from "../../frameworks/security/uniqueuid.bcrypt";
 import { INotificationRepository } from "../../entities/repositoryInterface/notification/INotificationRepository";
 import { NotificationType } from "../../shared/constants";
@@ -13,7 +12,8 @@ import { messaging } from "../../shared/config";
 export class BookingSlotUseCase implements IBookingSlotUseCase {
   constructor(
     @inject("IBookingRepository") private bookingRepo: IBookingRepository,
-    @inject("INotificationRepository") private _notificationRepo: INotificationRepository,
+    @inject("INotificationRepository")
+    private _notificationRepo: INotificationRepository,
     @inject("IClientRepository") private _clientRepo: IClientRepository
   ) {}
   async execute(
@@ -23,12 +23,12 @@ export class BookingSlotUseCase implements IBookingSlotUseCase {
     duration: number,
     price: number,
     date: string,
-    paymentType:string,
-    playerCount:number
+    paymentType: string,
+    game: string,
+    playerCount: number
   ): Promise<IBookingEntity> {
     try {
-
-      const bookingId = generateBookingId()
+      const bookingId = generateBookingId();
       const data = {
         userId,
         turfId,
@@ -38,60 +38,70 @@ export class BookingSlotUseCase implements IBookingSlotUseCase {
         price,
         date,
         paymentType,
+        game,
         status: "Booked",
       };
       console.log("data inside usecase", data);
-      if(paymentType == "single"){
-        const saveData = await this.bookingRepo.save(data);
-        return saveData as IBookingEntity;
-      }else if(paymentType == "shared"){
-        let userIds=[userId]
+      if (paymentType == "single") {
+        const bookingData= await this.bookingRepo.getUserBookingDetials(userId)
+        const date = new Date().getDay()
+        const filtered = bookingData.filter((data)=> (new Date(data.date).getDay() >= date && (new Date(data.date).getDay() < date + 3) ))
+        console.log("filtered data count",filtered.length)
+        if(filtered.length <= 3){
+          const saveData = await this.bookingRepo.save(data);
+          return saveData as IBookingEntity;
+        }else{
+          throw Error("limit execeed")
+        }
+      } else if (paymentType == "shared") {
+        let userIds = [userId];
         let walletContributions = new Map<string, number>();
         walletContributions.set(userId, price);
         price = price * playerCount;
-        let data={
-            turfId,
-            time,
-            userIds,
-            bookingId,
-            duration,
-            price,
-            date,
-            paymentType,
-            walletContributions,
-            status: "Pending",
-            playerCount
-          }
-        const saveData = await this.bookingRepo.saveSharedBooking(data)
-        const user = await this._clientRepo.findById(data.userIds[0]);
-        if(user?.id){
-            await this._notificationRepo.create(
-                data.userIds[0],
-                NotificationType.HOSTED_GAME,
-                `Your booking for ${data.date} at ${data.time} has been created successfully.`,
-                "Booking Created",
-            );
-        }
-
-        if(user?.fcmToken){
-            await messaging.send({
-                notification:{
-                    title: "Booking Created",
-                    body: `Your booking for ${data.date} at ${data.time} has been created successfully.`,
+        let data = {
+          turfId,
+          time,
+          userIds,
+          bookingId,
+          duration,
+          price,
+          date,
+          paymentType,
+          walletContributions,
+          status: "Pending",
+          game,
+          playerCount,
+        };
+        const saveData = await this.bookingRepo.saveSharedBooking(data);
+        const user = await this._clientRepo.findById(userId);
+        if (user?.id) {
+          await this._notificationRepo.create(
+            userId,
+            NotificationType.HOSTED_GAME,
+            `Your booking for ${data.date} at ${data.time} has been created successfully.`,
+            "Booking Created"
+          );
+            if (user?.fcmToken) {
+              await messaging.send({
+                notification: {
+                  title: "Booking Created",
+                  body: `Your booking for ${data.date} at ${data.time} has been created successfully.`,
                 },
                 token: user.fcmToken,
-            });
+              });
+            }
         }
 
-        return saveData as IBookingEntity
-      }else{
-          const saveData = await this.bookingRepo.save(data);
-          return saveData as IBookingEntity;
+        
+
+        return saveData as IBookingEntity;
+      } else {
+        const saveData = await this.bookingRepo.save(data);
+        return saveData as IBookingEntity;
       }
-      
     } catch (error) {
       console.error("BookingSlotUseCase failed:", error);
-      throw new Error("Failed to save booking");
+      throw new Error("Failed to save");
     }
   }
 }

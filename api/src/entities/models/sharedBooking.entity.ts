@@ -16,6 +16,7 @@ export interface ISharedBookingEntity {
     refundsIssued?: Map<string, number>;
     isSlotLocked: boolean;
     playerCount:number;
+    game?:string;
     createdAt: Date;
 }
 

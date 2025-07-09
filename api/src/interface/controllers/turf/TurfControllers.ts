@@ -70,8 +70,6 @@ export class TurfControllers implements ITurfControllers{
     async updateTurfStatus(req: Request, res: Response): Promise<void> {
             try {
                 const {turfId} = req.params;
-                console.log("turf id",turfId);
-                
                 await this._updateTurf.execute(turfId);
                 res.status(HTTP_STATUS.OK).json({
                     success:true,
@@ -111,9 +109,6 @@ export class TurfControllers implements ITurfControllers{
             try {
                 const {status,reason} = req.body;
                 const {turfId} = req.params;
-                console.log("status",status)
-                console.log("turf id",turfId);
-                
                 await this._updateTurfRequest.execute(turfId,status,reason);
                 res.status(HTTP_STATUS.OK).json({
                     success:true,
@@ -128,9 +123,7 @@ export class TurfControllers implements ITurfControllers{
         //generate slots
 
         async generateSlots(req: Request, res: Response): Promise<void> {
-            try {
-                console.log("genrate body",req.body);
-                
+            try { 
                 const {turfId,date,startTime,endTime,slotDuration,price,selectedDate,endDate}=req.body;
                 
                 const slots = await this._generateSlot.execute(
@@ -156,8 +149,6 @@ export class TurfControllers implements ITurfControllers{
 
         async editTurf(req: Request, res: Response): Promise<void> {
             try {
-                console.log("hii");
-                
                 const turfId = (req as CustomRequest).user.id;
                 console.log("turf id",turfId);
                 
@@ -176,12 +167,10 @@ export class TurfControllers implements ITurfControllers{
                         updateData[field] = req.body[field]
                     }
                 });
-                console.log("data in edit turf",req.body);
                 const updateTurf = await this._updateUserProfile.execute(
                     turfId,
                     updateData
                 )
-                console.log("update turf data",updateTurf);
                 
                 res.status(HTTP_STATUS.OK).json({
                     success: true,
@@ -201,8 +190,6 @@ export class TurfControllers implements ITurfControllers{
                 currPass:string,
                 newPass:string
             }
-            console.log("change pass body data",req.body);
-            console.log("curr",currPass,"new",newPass);
             await this._updateTurfPassWordUseCase.execute(userId,currPass,newPass)
             
             res.status(HTTP_STATUS.OK).json({
@@ -218,14 +205,10 @@ export class TurfControllers implements ITurfControllers{
 
         async getSlots(req: Request, res: Response): Promise<void> {
             try {
-                console.log("slotsss");
-                
                 const { turfId, date } = req.query as { turfId: string; date: string };
                 console.log(turfId,date);
                 
                 const slots = await this._fetchSlots.execute(turfId, date);
-                console.log("slots",slots);
-                
                 res.status(200).json({
                     success: true,
                     data: slots,

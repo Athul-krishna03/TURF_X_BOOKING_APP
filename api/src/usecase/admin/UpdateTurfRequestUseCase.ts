@@ -14,8 +14,6 @@ export class UpdateTurfRequestUseCase implements IUpdateTurfRequestUseCase{
         const turf = await this.turfRepository.findById(id);
         if(turf){
             await this.nodeMailerService.sendEmail(turf?.email,sub,reason)
-            console.log("mail sended ");
-            
         }
         
         await this.turfRepository.findByIdAndUpdateRequest(id,status);

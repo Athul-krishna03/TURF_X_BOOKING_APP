@@ -12,7 +12,9 @@ import { uploadProfileImageCloudinary } from "../../utils/cloudinaryImageUpload"
 import { ChatRoom, Message, User } from "../../types/ChatRoomCommunityTypes";
 import { NewsSidebar } from "../../components/chatRoom/news-sidebar";
 
-const socket = io("http://localhost:5000", { autoConnect: false });
+const backendUrl = import.meta.env.VITE_BACKEND_API
+
+const socket = io(backendUrl, { autoConnect: false });
 
 export default function CommunityPage() {
   const CURRENT_USER_ID = useSelector((state: any) => state.user.user.id);
@@ -25,7 +27,7 @@ export default function CommunityPage() {
   const [isLoadingRooms, setIsLoadingRooms] = useState(true);
   const [isLoadingChat, setIsLoadingChat] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
-  const { data: chatRoomsData } = useGetAllChatRooms(CURRENT_USER_ID);
+  const { data: chatRoomsData ,isLoading,refetch} = useGetAllChatRooms(CURRENT_USER_ID);
   useEffect(() => {
     socket.connect();
 
@@ -54,7 +56,7 @@ export default function CommunityPage() {
   console.log("chat rooms data", chatRoomsData);
   useEffect(() => {
     if (chatRoomsData) {
-      setChatRooms(chatRoomsData);
+      setChatRooms(chatRoomsData[0]);
       setIsLoadingRooms(false);
     }
   }, [chatRoomsData]);
@@ -242,7 +244,7 @@ export default function CommunityPage() {
           </div>
         )}
       </div>
-      <NewsSidebar className="w-80"/>
+      <NewsSidebar className="w-80" news={chatRoomsData?.[1]} isLoading={isLoading} fetchNews={refetch} />
     </div>
   );
 }

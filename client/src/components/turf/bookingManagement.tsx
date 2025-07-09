@@ -146,7 +146,7 @@ const BookingManagement = () => {
           </TabsContent>
           <TabsContent value="hosted">
             {isLoading ? (
-              <p>Loading hosted games...</p>
+              <CardLoadingSkeleton/>
             ) : bookingData.hosted.length === 0 ? (
               <p className="text-gray-500">No hosted games found.</p>
             ) : (

@@ -19,7 +19,6 @@ export class OtpService implements IOtpService {
 
     async verifyOtp(email: string, otp: string): Promise<boolean> {
         const storedOtp = await this.redisClient.get(`otp:${email}`);
-        console.log("so",storedOtp,"otp",otp)
         if (!storedOtp) return false;
         return await this.bcrypt.compare(otp, storedOtp);
     }

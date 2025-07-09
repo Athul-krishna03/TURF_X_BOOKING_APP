@@ -9,9 +9,7 @@ export class GetSlotDataUseCase implements IGetSlotDataUseCase{
         @inject("ISlotRepository") private slotRepo:ISlotRepository
     ){}
     async execute(slotId:string):Promise<ISlotEntity> {
-        const data = await this.slotRepo.findById(slotId);
-        console.log("slot data in findByid",data);
-        
+        const data = await this.slotRepo.findById(slotId); 
         return data
     }
 }

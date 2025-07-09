@@ -84,6 +84,14 @@ export class AdminRoutes extends BaseRoute{
             (req:Request,res:Response)=>{
                 bookingController.getAdminDashBoardData(req,res)
             }
+        ),
+        this.router.get(
+            "/admin/getRevenueData",
+            verifyAuth,
+            authorizeRole(["admin"]),
+            (req:Request,res:Response)=>{
+                bookingController.getRevenueData(req,res)
+            }
         )
         
     }

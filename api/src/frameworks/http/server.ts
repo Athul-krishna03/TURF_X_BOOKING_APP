@@ -74,7 +74,7 @@ export class Server {
         credentials: true,
       })
     );
-
+    console.log("ex",config.cors.ALLOWED_ORGIN)
     this._app.use((req: Request, res: Response, next: NextFunction) => {
       express.json()(req, res, next);
     });

@@ -6,10 +6,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
-import { Textarea } from "../ui/textarea"
 import { Card, CardContent } from "../ui/card"
 import { Badge } from "../ui/badge"
-import { MessageCircle, Upload, X, Users, Camera, Hash, FileText } from "lucide-react"
+import { MessageCircle, Upload, X, Users, Camera, Hash } from "lucide-react"
 import { toast } from "sonner"
 import { uploadProfileImageCloudinary } from "../../utils/cloudinaryImageUpload"
 
@@ -42,7 +41,6 @@ export default function CreateChatRoomModal({
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [roomPhoto, setRoomPhoto] = useState<File | null>(null)
     const [photoPreview, setPhotoPreview] = useState<string>("")
-    // const user = useSelector((state: any) => state.user.user)
 
     const [formData, setFormData] = useState({
         name: "",
@@ -219,24 +217,6 @@ export default function CreateChatRoomModal({
                 required
                 />
             </div>
-
-            {/* Room Description */}
-            <div className="space-y-2">
-                <Label htmlFor="description" className="text-sm font-medium text-gray-300 flex items-center">
-                <FileText className="w-4 h-4 mr-2" />
-                Description (Optional)
-                </Label>
-                <Textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Describe the purpose of this chat room..."
-                rows={3}
-                className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-green-500 resize-none"
-                />
-            </div>
-
             {/* Participants Preview */}
             {users.length > 0 && (
                 <Card className="bg-gray-800 border-gray-700">

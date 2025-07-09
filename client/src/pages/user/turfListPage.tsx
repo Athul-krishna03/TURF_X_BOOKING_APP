@@ -384,15 +384,6 @@ export default function TurfList() {
               Apply Location
             </button>
           </div>
-          
-          {location && (
-            <div className="mt-3 p-3 bg-gray-800/50 rounded-lg">
-              <div className="text-xs text-gray-400 mb-1">Selected Coordinates:</div>
-              <div className="text-sm text-green-400 font-mono">
-                {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
-              </div>
-            </div>
-          )}
         </div>
       </div>
       {isMapPanelOpen && (

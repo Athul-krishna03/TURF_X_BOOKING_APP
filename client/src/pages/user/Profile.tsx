@@ -7,7 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar"
 import { Input } from "../../components/ui/input"
 import { Label } from "../../components/ui/label"
 import { Button } from "../../components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
 import { User, ArrowLeft, Edit, KeyRound } from "lucide-react"
 import * as Yup from "yup"
 import { AnySchema } from "yup"
@@ -28,7 +27,6 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false)
   const [showPasswordChange, setShowPasswordChange] = useState(false)
   const [profileImage, setProfileImage] = useState<string | null>(user?.profileImage || null)
-  const [selectedPosition, setSelectedPosition] = useState(user?.position || "Not specified")
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
   const dispatch = useDispatch<AppDispatch>()
   const { mutateAsync } = useUserChangePassword()
@@ -86,7 +84,6 @@ const Profile = () => {
     const updatedData = {
       name: formData.name.trim(),
       phone: formData.phone.trim() || null,
-      position: selectedPosition,
     }
 
     try {
@@ -101,7 +98,6 @@ const Profile = () => {
       const profileData: updateProfilePayload = {
         name: updatedData.name,
         phone: updatedData.phone || "",
-        position: updatedData.position || "",
         profileImage: imageUrl,
       }
 
@@ -211,7 +207,6 @@ const Profile = () => {
                   <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2">
                     {formData.name}
                   </h1>
-                  <p className="text-gray-400 text-lg">{selectedPosition}</p>
                 </div>
 
                 {editMode ? (
@@ -238,25 +233,7 @@ const Profile = () => {
                           )}
                         </div>
                       ))}
-
-                      <div className="space-y-2">
-                        <Label htmlFor="position" className="text-sm font-medium text-gray-300">
-                          Playing Position
-                        </Label>
-                        <Select value={selectedPosition} onValueChange={setSelectedPosition}>
-                          <SelectTrigger className="bg-gray-700/50 border-gray-600/50 focus:border-green-500/50 rounded-xl">
-                            <SelectValue placeholder="Select position" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Goalkeeper">Goalkeeper</SelectItem>
-                            <SelectItem value="Defender">Defender</SelectItem>
-                            <SelectItem value="Midfielder">Midfielder</SelectItem>
-                            <SelectItem value="Forward">Forward</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
                     </div>
-
                     <div className="flex gap-4 pt-6">
                       <Button 
                         onClick={() => setEditMode(false)} 
@@ -279,7 +256,6 @@ const Profile = () => {
                       {[
                         { label: "Email", value: formData.email },
                         { label: "Phone", value: formData.phone || "Not provided" },
-                        { label: "Playing Position", value: selectedPosition }
                       ].map((item, index) => (
                         <div key={index} className="flex justify-between items-center py-4 px-6 bg-gray-700/30 rounded-xl border border-gray-600/30">
                           <span className="text-gray-400 font-medium">{item.label}</span>
@@ -287,7 +263,6 @@ const Profile = () => {
                         </div>
                       ))}
                     </div>
-
                     <div className="pt-4">
                       <Button
                         onClick={() => setShowPasswordChange(!showPasswordChange)}
@@ -299,7 +274,6 @@ const Profile = () => {
                     </div>
                   </div>
                 )}
-
                 {showPasswordChange && !editMode && (
                   <div className="mt-6">
                     <ChangePassword onSubmit={handlePasswordChange} onCancel={() => setShowPasswordChange(false)} />

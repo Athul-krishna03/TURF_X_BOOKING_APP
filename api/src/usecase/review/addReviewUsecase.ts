@@ -21,9 +21,7 @@ export class AddReviewUseCase implements IAddReviewUseCase {
         const isReviewExisting = await this._reviewRepository.findOne({
         turfId,
         reviewerId: userId,
-        });
-        console.log("usecase");
-        
+        });      
         if (isReviewExisting) {
         throw new CustomError(
             ERROR_MESSAGES.REVIEW_EXISTING,

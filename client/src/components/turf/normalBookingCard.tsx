@@ -1,14 +1,17 @@
-import { CalendarDays, Clock, User, MapPin, Phone } from "lucide-react";
+import { CalendarDays, Clock, User, MapPin, Phone, Currency } from "lucide-react";
 import { Booking } from "../../types/Type";
 import moment from "moment";
 
 interface NormalBookingCardProps {
   booking: Booking;
   onCancel?: (bookingId: string,bookingType:string) => void;
+  userType?:string;
 }
 
-export default function NormalBookingCard({ booking, onCancel }: NormalBookingCardProps) {
+export default function NormalBookingCard({ booking, onCancel, userType}: NormalBookingCardProps) {
   const { _doc, turf } = booking;
+  const totalAmount = _doc.price/(1+0.05);
+  const platformfee = totalAmount*0.05;
 
   const handleCancel = () => {
     if (onCancel && _doc._id) {
@@ -47,14 +50,6 @@ export default function NormalBookingCard({ booking, onCancel }: NormalBookingCa
             <span className={`text-xs font-medium px-3 py-1 rounded-full border ${getStatusColor(_doc.status)}`}>
               {_doc.status}
             </span>
-            {_doc.status.toLowerCase() !== 'cancelled' && (
-              <button
-                onClick={handleCancel}
-                className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
-                title="Cancel Booking"
-              >
-              </button>
-            )}
           </div>
         </div>
       </div>
@@ -84,6 +79,17 @@ export default function NormalBookingCard({ booking, onCancel }: NormalBookingCa
                 <p className="text-xs text-gray-500 uppercase tracking-wide">Time & Duration</p>
                 <p className="text-sm font-medium text-gray-900">
                   {_doc.time} • {_doc.duration} hour{_doc.duration > 1 ? "s" : ""}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-purple-50 rounded-full flex items-center justify-center">
+                <Currency size={14} className="text-purple-600" />
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 uppercase tracking-wide">Slot price</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {_doc.price}
                 </p>
               </div>
             </div>
@@ -122,7 +128,7 @@ export default function NormalBookingCard({ booking, onCancel }: NormalBookingCa
             Booked on {moment(_doc.createdAt || new Date()).format("MMM D, h:mm A")}
           </div>
           <div className="flex gap-2">
-            {(_doc.status.toLowerCase() === 'booked' && _doc.createdAt > new Date() ) && (
+            {(_doc.status.toLowerCase() === 'booked' && new Date( _doc.date) > new Date() && userType != "admin") && (
               <button
                 onClick={handleCancel}
                 className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition-colors"
@@ -130,9 +136,12 @@ export default function NormalBookingCard({ booking, onCancel }: NormalBookingCa
                 Cancel Booking
               </button>
             )}
-            {/* <button className="px-4 py-2 text-sm font-medium text-gray-600 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors">
-              Contact Customer
-            </button> */}
+            {userType == "admin" &&
+              <div className="text-m text-black p-5 font-medium">
+                {`Platform Fee: ₹ ${platformfee}`}
+              </div>
+            }
+            
           </div>
         </div>
       </div>

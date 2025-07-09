@@ -61,3 +61,12 @@ export const loginUser = async (data: LoginData) => {
 
     return response.data
   }
+  export const sendForgotPasswordEmail = async (email: string,role?:string) => {
+    const response = await api.post("/forgot-password", {email , role});
+    return response.data;
+  };
+
+  export const resetPassword = async (password:string,token:string)=>{
+    const response = await api.patch('/resetPassword',{password,token})
+    return response
+  }

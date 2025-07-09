@@ -22,7 +22,6 @@ export class SlotController implements ISlotController {
   async updateSlot(req: Request, res: Response): Promise<void> {
     try {
       const userId = (req as CustomRequest).user.id;
-      console.log("bookingData",req.body)
       const parseResult = BookingRequestSchema.safeParse(req.body);
       if (!parseResult.success) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -34,7 +33,6 @@ export class SlotController implements ISlotController {
       }
 
       const bookingData = parseResult.data;
-      console.log("Booking dataSingle:", bookingData);
       const { bookedSlots } = await this._slotBookingService.bookSlot({ ...bookingData, userId });
 
       res.status(HTTP_STATUS.OK).json({ success: true, bookedSlots });

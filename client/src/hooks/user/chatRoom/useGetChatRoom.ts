@@ -4,6 +4,7 @@ import { getChatRooms } from "../../../services/user/userServices";
 export const useGetAllChatRooms = (userId:string) => {
     return useQuery({
         queryKey:['chatRooms', userId],
-        queryFn: () => getChatRooms(userId)
+        queryFn: () => getChatRooms(userId),
+        refetchOnWindowFocus:false
     });
 };

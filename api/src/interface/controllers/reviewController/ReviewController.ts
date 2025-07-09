@@ -19,8 +19,6 @@ export class ReviewController{
         try {
         const userId= (req as CustomRequest).user.id;
         const { turfId, rating, reviewText } = req.body;
-        console.log("body review",req.body)
-
         await this._addShopReviewUseCase.execute(
             turfId,
             userId,
@@ -40,9 +38,7 @@ export class ReviewController{
     async getReview(req:Request,res:Response):Promise<void>{
         try {
             const {turfId} = req.query as {turfId:string}
-            console.log("turfId",turfId)
             const reviews =await this._getReviewUseCase.execute(turfId);
-            console.log("reviewa",reviews)
             if(reviews){
                 res.status(HTTP_STATUS.OK).json({
                     success: true,

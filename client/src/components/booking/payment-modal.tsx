@@ -5,11 +5,12 @@ import PaymentWrapper from "./Payment-form";
 import { Button } from "../ui/button";
 import { Slot } from "../../types/SlotsType";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Clock, Calendar, CreditCard, CheckCircle } from "lucide-react";
+import { Clock, Calendar, CreditCard, CheckCircle, Circle } from "lucide-react";
 
 export const PaymentModal = ({
   date,
   slot,
+  game,
   duration,
   currency,
   totalPrice,
@@ -20,7 +21,8 @@ export const PaymentModal = ({
   onJoinGame,
 }: {
   date: any;
-  slot: Slot | string; 
+  slot: Slot | string;
+  game:string;
   duration: number;
   currency: string;
   totalPrice: number;
@@ -85,6 +87,15 @@ export const PaymentModal = ({
                         </p>
                       </div>
                     </div>
+                    <div className="flex items-center space-x-3">
+                      <Circle size={18} className="text-green-400" />
+                      <div>
+                        <p className="text-sm text-gray-400">Selected Game</p>
+                        <p className="font-medium text-lg">
+                          {game}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-gray-300">Payment Method</p>
@@ -92,6 +103,7 @@ export const PaymentModal = ({
                       slotId={typeof slot === "string" ? slot : slot._id}
                       price={totalPrice}
                       date={date}
+                      game={game}
                       durarion={duration}
                       onSuccess={handlePaymentSuccess}
                       onError={onClose}

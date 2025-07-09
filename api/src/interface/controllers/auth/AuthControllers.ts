@@ -32,6 +32,8 @@ import { IRefreshTokenUseCase } from "../../../entities/useCaseInterfaces/auth/I
 import { ILoginTurfUseCase } from "../../../entities/useCaseInterfaces/auth/ILoginTurfUseCase";
 import { IUserEntity } from "../../../entities/models/user.entity";
 import { ITurfEntity } from "../../../entities/models/turf.entity";
+import { IForgotPasswordUseCase } from "../../../entities/useCaseInterfaces/auth/IForgotPasswordUseCase";
+import { IResetPasswordUseCase } from "../../../entities/useCaseInterfaces/auth/IResetPasswordUseCase";
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -53,7 +55,11 @@ export class AuthController implements IAuthController {
     @inject("IBlackListTokenUseCase")
     private _blacklistTokenUseCase:IBlackListTokenUseCase,
     @inject("IRefreshTokenUseCase")
-    private _refreshTokenUseCase:IRefreshTokenUseCase
+    private _refreshTokenUseCase:IRefreshTokenUseCase,
+    @inject("IForgotPasswordUseCase")
+    private _forgotPasswordUseCase:IForgotPasswordUseCase,
+    @inject("IResetPasswordUseCase")
+    private _resetPassword:IResetPasswordUseCase
   ) {}
 
   //register use
@@ -74,9 +80,7 @@ export class AuthController implements IAuthController {
         });
         return;
       }
-      console.log("body data ",req.body)
       const validateData = schema.parse(req.body);
-      console.log("validate data", validateData);
       await this._registerUserUseCase.execute(validateData);
       res.status(HTTP_STATUS.CREATED).json({
         success: true,
@@ -90,14 +94,11 @@ export class AuthController implements IAuthController {
 
   //login User
 
- async login(req: Request, res: Response): Promise<void> {
-    console.log("entered to login controller");
-
+  async login(req: Request, res: Response): Promise<void> {
     try {
       const data = req.body as LoginUserDTO;
       const validateData = loginSchema.parse(data);
       const user =  await this._LoginUserUseCase.execute(validateData)
-      console.log("user data",user)
       if(!user.id || !user.email || !user.role){
         throw new Error("User ID,Email,or Role is missing")
       }
@@ -118,7 +119,6 @@ export class AuthController implements IAuthController {
       accessTokenName,
       refreshTokenName
       )
-      console.log("auth login",user)
       if (user.role === "user" || user.role === "admin") {
         const userEntity = user as IUserEntity;
       
@@ -213,11 +213,7 @@ export class AuthController implements IAuthController {
   async googleAuth(req:Request,res:Response):Promise<void>{
     try{
       const {credential,client_id,role}=req.body;
-
-      console.log("heloo google",req.body)
       const user = await this._googleAuthUseCase.execute(credential,client_id,role);
-      console.log("user data",user)
-
       if(!user.id || !user.email || !user.role){
         throw new Error("User ID,email,or role is missing");
       }
@@ -277,12 +273,10 @@ export class AuthController implements IAuthController {
       handleErrorResponse(res, error);
     }
   }
-   refreshToken(req:Request,res:Response):void{
+    refreshToken(req:Request,res:Response):void{
     try {
       const refreshToken = (req as CustomRequest).user.refresh_token;
       const newTokens = this._refreshTokenUseCase.execute(refreshToken);
-      console.log("newtoken",newTokens);
-      
       const accessTokenName = `${newTokens.role}_access_token`;
       updateCookieWithAccessToken(
         res,
@@ -300,5 +294,33 @@ export class AuthController implements IAuthController {
         .status(HTTP_STATUS.UNAUTHORIZED)
         .json({ message: ERROR_MESSAGES.INVALID_TOKEN });
     }
-   }
+  }
+
+  async forgotPassword(req:Request,res:Response):Promise<void>{
+    try {
+      const {email,role} = req.body;
+      const result = await this._forgotPasswordUseCase.execute(email,role)
+      if(result){
+        res.status(HTTP_STATUS.OK).json({message:SUCCESS_MESSAGES.RESETMAIL_SEND_SUCCESS})
+        return
+      }
+    } catch (error) {
+      handleErrorResponse(res,error)
+    }
+  }
+
+  async resetPasswords(req:Request,res:Response):Promise<void>{
+    try {
+      const {token,password}=req.body
+      const result = await this._resetPassword.execute(token,password)
+      if(result){
+        res.status(HTTP_STATUS.OK).json({message:SUCCESS_MESSAGES.PASSWORD_RESET_SUCCESS})
+        return 
+      }else{
+        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({message:ERROR_MESSAGES.TOKEN_EXPIRED})
+      }
+    } catch (error) {
+      handleErrorResponse(res,error)
+    }
+  }
 }

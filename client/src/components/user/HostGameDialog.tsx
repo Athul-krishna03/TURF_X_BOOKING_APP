@@ -162,6 +162,7 @@ const HostedGameDialog = ({
         <PaymentModal
           slot={game.time}
           date={game.date}
+          game={game.sportType || "Football"}
           duration={game.duration}
           currency={"₹"}
           totalPrice={price}

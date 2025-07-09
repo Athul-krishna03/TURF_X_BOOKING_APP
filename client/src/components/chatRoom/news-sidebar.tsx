@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { ExternalLink, Clock, Globe } from "lucide-react";
-import axios from "axios";
+
 
 interface NewsArticle {
     source: {
@@ -18,6 +18,9 @@ interface NewsArticle {
 
 interface NewsSidebarProps {
     className?: string;
+    news:NewsArticle[];
+    isLoading:boolean;
+    fetchNews:()=>{}
 }
 
 export interface ArticleDTO {
@@ -27,53 +30,11 @@ export interface ArticleDTO {
     url: string;
 }
 
-export function NewsSidebar({ className = "" }: NewsSidebarProps) {
-    const [news, setNews] = useState<NewsArticle[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
+export function NewsSidebar({ className = "" ,news,isLoading,fetchNews}: NewsSidebarProps) {
+    
     useEffect(() => {
         fetchNews();
     }, []);
-
-    const fetchNews = async () => {
-        try {
-        setIsLoading(true);
-        setError(null);
-
-        const response = await axios.get("https://newsapi.org/v2/everything", {
-            params: {
-            q: "football",
-            sortBy: "publishedAt",
-            language: "en",
-            apiKey: "048bfaae222c42c2aafd76aed8682b0e",
-            },
-        });
-
-        const articles = response.data.articles;
-
-        const news = articles.map((article: any) => {
-            return {
-            title: article.title,
-            urlToImage: article.urlToImage,
-            source: article.source,
-            url: article.url,
-            } as ArticleDTO;
-        });
-
-        if (!response) {
-            throw new Error("Failed to fetch news");
-        }
-            console.log("news" ,news)
-        setNews(news || []);
-        } catch (err) {
-        setError("Failed to load news");
-        console.error("News fetch error:", err);
-        } finally {
-        setIsLoading(false);
-        }
-    };
-
     const handleNewsClick = (url: string) => {
         window.open(url, "_blank", "noopener,noreferrer");
     };
@@ -145,9 +106,9 @@ export function NewsSidebar({ className = "" }: NewsSidebarProps) {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-            {error && (
+            {!news && (
             <div className="p-4 text-center text-red-400">
-                <p>{error}</p>
+                <p>No news</p>
                 <button
                 onClick={fetchNews}
                 className="mt-2 text-blue-400 hover:text-blue-300 underline"
@@ -209,7 +170,7 @@ export function NewsSidebar({ className = "" }: NewsSidebarProps) {
             ))}
             </div>
 
-            {news.length === 0 && !isLoading && !error && (
+            {news.length === 0 && !isLoading  && (
             <div className="p-4 text-center text-gray-400">
                 <Globe className="w-12 h-12 mx-auto mb-2 opacity-50" />
                 <p>No news available</p>

@@ -10,6 +10,7 @@ export const BookingRequestSchema = z.object({
     slotLockId: z.string(),
     paymentType: z.enum(["single", "shared"]),
     playerCount: z.number().optional(),
+    game:z.string()
 });
 
 export type BookingRequestDTO = z.infer<typeof BookingRequestSchema>;

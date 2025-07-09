@@ -86,7 +86,6 @@ export class UserController implements IUserController {
           updateData[field] = req.body[field];
         }
       });
-      console.log("data in controller",req.body)
       const updateUser = await this._updateUserProfile.execute(
         userId,
         updateData
@@ -110,9 +109,6 @@ export class UserController implements IUserController {
         currPass:string,
         newPass:string
       }
-      console.log("change pass body data",req.body);
-      
-      console.log("curr",currPass,"new",newPass);
       await this._updateUserPassWordUseCase.execute(userId,currPass,newPass)
       
       res.status(HTTP_STATUS.OK).json({
@@ -149,11 +145,8 @@ export class UserController implements IUserController {
 
   async saveFcmToken(req: Request, res: Response): Promise<void> {
     try {
-      console.log("Hello");
       const userId = (req as CustomRequest).user.id;
-
       const { token } = req.body;
-      console.log(token);
       if (!token || typeof token !== "string") {
         throw new CustomError(
           ERROR_MESSAGES.INVALID_TOKEN,

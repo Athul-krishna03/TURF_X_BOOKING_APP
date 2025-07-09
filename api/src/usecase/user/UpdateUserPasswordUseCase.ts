@@ -21,8 +21,6 @@ export class UpdateUserPassWordUseCase implements IUpdateUserPassWordUseCase{
             )
         }
         const isPasswordMatch = await this.passwordBcrypt.compare(currentPassword,user.password);
-        console.log("pass match",isPasswordMatch);
-
         if(!isPasswordMatch){
             throw new CustomError(
                 ERROR_MESSAGES.WRONG_CURRENT_PASSWORD,
@@ -30,7 +28,6 @@ export class UpdateUserPassWordUseCase implements IUpdateUserPassWordUseCase{
             )
         }
         const isCurrentMatchWithOld = await this.passwordBcrypt.compare(newPassword,user.password);
-        console.log("hai    ",isCurrentMatchWithOld)
         if(isCurrentMatchWithOld){
             throw new CustomError(
                 ERROR_MESSAGES.SAME_CURR_NEW_PASSWORD,
@@ -39,7 +36,6 @@ export class UpdateUserPassWordUseCase implements IUpdateUserPassWordUseCase{
         }
         
         const hashedPassword = await this.passwordBcrypt.hash(newPassword);
-        console.log(hashedPassword);
         await this.clientRepo.findByIdAndUpdatePassWord(userId,hashedPassword);
 
     }

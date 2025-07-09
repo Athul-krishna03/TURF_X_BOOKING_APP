@@ -26,7 +26,6 @@ async execute(userId: string): Promise<IHostedGame[]> {
     const mapped = await Promise.all(
     filtered.map(async (game) => {
         const turf = await this.turfRepo.getTurfByTurfId(game.turfId) as ITurfEntity;
-        console.log("games", game);
         return {
             title: "Friendly Match",
             hostName: (game.userIds[0]?.name as string) || "Unknown",

@@ -1,4 +1,5 @@
 import { axiosInstance } from "../../api/private.axios";
+import { ADMIN_ROUTES } from "../../constants/admin_routes";
 
 export const getAllUsers = async ({
   page = 1,
@@ -9,7 +10,7 @@ export const getAllUsers = async ({
   limit: number;
   search: string;
 }) => {
-  const reponse = await axiosInstance.get("/_ad/admin/get-Users", {
+  const reponse = await axiosInstance.get(ADMIN_ROUTES.GET_ALL_USERS, {
     params: {
       page,
       limit,
@@ -20,14 +21,14 @@ export const getAllUsers = async ({
 };
 
 export const logoutAdmin = async () => {
-  const response = await axiosInstance.post("/_ad/admin/logout");
+  const response = await axiosInstance.post(ADMIN_ROUTES.LOGOUT_ADMIN);
   return response.data;
 };
 
 export const updateStatus = async (turfId: string) => {
   try {
     const reponse = await axiosInstance.patch(
-      `/_ad/admin/user-status/${turfId}`,
+      ADMIN_ROUTES.UPDATE_USER_STATUS(turfId),
       {}
     );
     return reponse.data;
@@ -38,8 +39,7 @@ export const updateStatus = async (turfId: string) => {
 
 export const updateTurfStatus = async (turfId: string) => {
   try {
-    const reponse = await axiosInstance.patch(
-      `/_ad/admin/turf-status/${turfId}`,
+    const reponse = await axiosInstance.patch(ADMIN_ROUTES.UPDATE_TURF_STATUS(turfId),
       {}
     );
     return reponse.data;
@@ -57,7 +57,7 @@ export const getAllTurfs = async ({
   limit: number;
   search: string;
 }) => {
-  const reponse = await axiosInstance.get("/_ad/admin/get-Turfs", {
+  const reponse = await axiosInstance.get(ADMIN_ROUTES.GET_ALL_TURFS, {
     params: {
       page,
       limit,
@@ -76,7 +76,7 @@ export const getAllTurfRequests = async ({
   limit: number;
   search: string;
 }) => {
-  const reponse = await axiosInstance.get("/_ad/admin/get-Requests", {
+  const reponse = await axiosInstance.get(ADMIN_ROUTES.GET_ALL_TURF_REQUESTS, {
     params: {
       page,
       limit,
@@ -92,7 +92,7 @@ export const updateRequestStatus = async (
 ) => {
   try {
     const reponse = await axiosInstance.patch(
-      `/_ad/admin/request-status/${turfId}`,
+      ADMIN_ROUTES.UPDATE_REQUEST_STATUS(turfId),
       { status, reason }
     );
     return reponse.data;
@@ -103,11 +103,20 @@ export const updateRequestStatus = async (
 
 export const getAdminDashBoardData = async () => {
   try {
-    const response = await axiosInstance.get("/_ad/admin/get-Dashboard");
-    console.log("Admin Dashboard Data:", response.data);
+    const response = await axiosInstance.get(ADMIN_ROUTES.GET_ADMIN_DASHBOARD_DATA);
     return response.data.dashBoardData;
   } catch (error: any) {
     console.error("Error fetching admin dashboard data:", error);
     throw new Error("Failed to fetch admin dashboard data");
   }
 };
+
+export const getRevenueData = async () => {
+  try {
+    const response = await axiosInstance.get(ADMIN_ROUTES.GET_REVENUE_DATA);
+    return response.data.revenueData;
+  } catch (error) {
+    console.error("Failed to fetch revenue data", error);
+    throw new Error("Failed to fetch revenue data");
+  }
+}

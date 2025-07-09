@@ -11,6 +11,7 @@ interface PaymentFormProps {
   date: string;
   slotId: string;
   price: number;
+  game:string;
   durarion: number;
   onSuccess: () => void;
   onError?: () => void;
@@ -23,6 +24,7 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string; slotLockI
   date,
   slotId,
   price,
+  game,
   durarion,
   onSuccess,
   clientSecret,
@@ -78,11 +80,13 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string; slotLockI
             date,
             slotId,
             price,
+            game,
             durarion,
             result.paymentIntent.id,
             slotLockId,
             paymentType,
-            playerCount
+            playerCount,
+            
           );
           setProcessing(false);
           onSuccess();
@@ -134,6 +138,7 @@ export default function PaymentWrapper({
   date,
   slotId,
   price,
+  game,
   durarion,
   onSuccess,
   onError,
@@ -153,7 +158,7 @@ export default function PaymentWrapper({
 
       try {
         if (paymentType !== "Join") {
-          const response = await paymentService(slotId, price);
+          const response = await paymentService(slotId, price,durarion);
           setClientSecret(response.data.clientSecret);
           setSlotLockId(response.data.lockId);
         } else {
@@ -203,6 +208,7 @@ export default function PaymentWrapper({
           slotId={slotId}
           price={price}
           date={date}
+          game={game}
           durarion={durarion}
           onSuccess={onSuccess}
           clientSecret={clientSecret}
@@ -210,7 +216,7 @@ export default function PaymentWrapper({
           paymentType={paymentType}
           playerCount={playerCount}
           onError={onError}
-          onJoinGame={onJoinGame} // Pass onJoinGame to PaymentForm
+          onJoinGame={onJoinGame}
         />
       </Elements>
     )

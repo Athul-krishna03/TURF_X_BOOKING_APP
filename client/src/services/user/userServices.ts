@@ -1,13 +1,15 @@
+
 import { axiosInstance } from "../../api/private.axios";
+import { USER_ROUTES } from "../../constants/user_routes";
 import { ChangePasswordData } from "../../hooks/user/userDashboard";
 
 export const logoutUser = async () => {
-  const response = await axiosInstance.post("/_us/user/logout");
+  const response = await axiosInstance.post(USER_ROUTES.LOGOUT);
   return response.data;
 };
 
 export const changePassword = async (data: ChangePasswordData) => {
-  const response = await axiosInstance.patch("/_us/user/change-password", data);
+  const response = await axiosInstance.patch(USER_ROUTES.CHANGE_PASSWORD, data);
   console.log("changePassword response", response);
   return response.data;
 };
@@ -25,7 +27,7 @@ export const getAllTurfsData = async ({
   location?: [number, number];
   filter?: string;
 }) => {
-  const reponse = await axiosInstance.get("/_us/user/get-Turfs", {
+  const reponse = await axiosInstance.get(USER_ROUTES.GET_TURFS, {
     params: {
       page,
       limit,
@@ -40,17 +42,17 @@ export const getAllTurfsData = async ({
 
 export const slots = async (turfId: string, date: string) => {
   const response = await axiosInstance.get(
-    `/_us/user/slots?turfId=${turfId}&date=${date}`
+    USER_ROUTES.SLOTS(turfId, date)
   );
   return response.data;
 };
 
-export const paymentService = async (slotId: string, price: number) => {
+export const paymentService = async (slotId: string, price: number,durarion:number) => {
   console.log("payment service");
 
   const response = await axiosInstance.post(
-    "/_us/user/payments/create-payment-intent",
-    { slotId, price }
+    USER_ROUTES.PAYMENT_CREATE_INTENT,
+    { slotId, price ,durarion }
   );
   console.log("payment api response", response);
   return response;
@@ -58,7 +60,7 @@ export const paymentService = async (slotId: string, price: number) => {
 
 export const sharedSlotPaymentService = async (price: number) => {
   const response = await axiosInstance.post(
-    "/_us/user/payments/create-payment-intent",
+    USER_ROUTES.SHARED_SLOT_PAYMENT,
     { price }
   );
   console.log("shared payment api response", response);
@@ -69,13 +71,14 @@ export const slotUpdate = async (
   date: string,
   slotId: string,
   price: number,
+  game:string,
   duration: number,
   paymentIntentId: string,
   slotLockId: string,
   paymentType: string,
   playerCount?: number
 ) => {
-  const response = await axiosInstance.post(`/_us/user/slots`, {
+  const response = await axiosInstance.post(USER_ROUTES.SLOT_UPDATE, {
     date,
     isBooked: true,
     slotId,
@@ -85,6 +88,7 @@ export const slotUpdate = async (
     paymentIntentId,
     paymentType,
     playerCount,
+    game
   });
   return response;
 };
@@ -95,7 +99,7 @@ export const sharedSlotJoin = async (
   price: number
 ) => {
   console.log(date, slotId);
-  const response = await axiosInstance.post(`/_us/user/joinSlot`, {
+  const response = await axiosInstance.post(USER_ROUTES.SHARED_SLOT_JOIN, {
     date,
     slotId,
     price,
@@ -106,7 +110,7 @@ export const sharedSlotJoin = async (
 };
 
 export const getAllBookings = async () => {
-  const response = await axiosInstance.get(`/_us/user/bookings`);
+  const response = await axiosInstance.get(USER_ROUTES.GET_ALL_BOOKING);
   console.log("booking data", response);
 
   return response.data.data;
@@ -114,7 +118,7 @@ export const getAllBookings = async () => {
 
 export const getSlotData = async (slotId: string) => {
   const response = await axiosInstance.get(
-    `/_us/user/getSlot?slotId=${slotId}`
+    USER_ROUTES.GET_SLOT_DATA(slotId)
   );
   console.log(response);
 
@@ -122,7 +126,7 @@ export const getSlotData = async (slotId: string) => {
 };
 
 export const fetchHostedGames = async () => {
-  const response = await axiosInstance.get("/_us/user/hosted-games");
+  const response = await axiosInstance.get(USER_ROUTES.FETCH_HOSTED_GAMES);
   console.log(response);
 
   return response.data.games;
@@ -130,7 +134,7 @@ export const fetchHostedGames = async () => {
 
 export const getJoinedGameDetials = async (bookingId: string | undefined) => {
   const response = await axiosInstance.get(
-    `/_us/user/joinedGameDetials?bookingId=${bookingId}`
+    USER_ROUTES.GET_JOINED_GAME_DETAILS(bookingId)
   );
   console.log("joinedGameDetials", response);
 
@@ -143,14 +147,14 @@ export const cancelBooking = async (
   isHost?: boolean
 ) => {
   if (bookingType == "joined") {
-    const response = await axiosInstance.patch(`/_us/user/cancelJoinedGame`, {
+    const response = await axiosInstance.patch(USER_ROUTES.CANCEL_BOOKING, {
       bookingId,
       bookingType,
       isHost,
     });
     return response;
   } else {
-    const response = await axiosInstance.patch(`/_us/user/cancelSingleSlot`, {
+    const response = await axiosInstance.patch(USER_ROUTES.CANCEL_BOOKING_SINGLE, {
       bookingId,
       bookingType,
     });
@@ -159,7 +163,7 @@ export const cancelBooking = async (
 };
 
 export const getWalletData = async () => {
-  const response = await axiosInstance.get("/_us/user/wallet");
+  const response = await axiosInstance.get(USER_ROUTES.GET_WALLET_DETAILS);
   console.log("wallet data", response);
   return response.data;
 };
@@ -168,35 +172,34 @@ export const getChatRooms = async (userId: string) => {
   console.log("api calling");
 
   const response = await axiosInstance.get(
-    `/_us/user/getChatRooms?userId=${userId}`
+    USER_ROUTES.GET_CHAT_ROOMS(userId)
   );
-  console.log("getChatRooms", response);
-  return response.data.data;
+  return [response.data.data,response.data.newsData]
 };
 
 export const createChatRoom = async (data: object) => {
   console.log("createChatRoom data", data);
-  const response = await axiosInstance.post("/_us/user/createChatRoom", data);
+  const response = await axiosInstance.post(USER_ROUTES.CREATE_CHAT_ROOM, data);
   return response.data;
 };
 
 export const getChatRoomByGameId = async (gameId: string) => {
   const response = await axiosInstance.get(
-    `/_us/user/getChatRoomByGameId?gameId=${gameId}`
+    USER_ROUTES.GET_CHAT_ROOM_BY_GAME_ID(gameId)
   );
   console.log("getChatRoomByGameId response", response);
   return response.data;
 };
 
 export const saveFCMtoken = async (token: string) => {
-  const response = await axiosInstance.post("/_us/user/savefcm-token", {
+  const response = await axiosInstance.post(USER_ROUTES.SAVE_FCM_TOKEN, {
     token,
   });
   return response.data;
 };
 
 export const getNotifications = async () => {
-  const response = await axiosInstance.get(`/_us/user/notification`);
+  const response = await axiosInstance.get(USER_ROUTES.GET_NOTIFICATIONS);
   return response.data;
 };
 
@@ -204,13 +207,13 @@ export const updateNotification = async (payload: {
   id?: string;
   all?: boolean;
 }) => {
-  const response = await axiosInstance.patch(`/_us/user/notification`, payload);
+  const response = await axiosInstance.patch(USER_ROUTES.UPDATE_NOTIFICATION, payload);
   return response.data;
 };
 
 export const getReviews = async (turfId: string) => {
   const response = await axiosInstance.get(
-    `/_us/user/getReview?turfId=${turfId}`
+    USER_ROUTES.GET_REVIEWS(turfId)
   );
   console.log("review data", response.data);
   return response.data.reviews;
@@ -225,7 +228,7 @@ export const addReview = async ({
   rating: string;
   reviewText: string;
 }) => {
-  const response = await axiosInstance.post(`/_us/user/review`, {
+  const response = await axiosInstance.post(USER_ROUTES.ADD_REVIEW, {
     turfId,
     rating,
     reviewText,

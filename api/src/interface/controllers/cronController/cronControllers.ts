@@ -17,14 +17,12 @@ export class CronController {
       console.log("Running expired slot cleanup task");
       try {
         await this._deleteExpiredSlotsUseCase.execute();
-        console.log("Completed expired slots cleanup");
       } catch (error) {
         console.error("Error in cron job:", error);
       }
 
       try {
         await this._deleteUnfilledGamesUseCase.checkDeadlines();
-        console.log("Completed unfilled games cleanup");
       } catch (error) {
         console.error("Unfilled games cleanup error:", error);
       }

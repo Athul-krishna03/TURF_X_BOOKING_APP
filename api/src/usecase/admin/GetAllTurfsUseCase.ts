@@ -12,7 +12,7 @@ export class GetAllTurfsUseCase implements IGetAllTurfUseCase{
         @inject("IReviewRepository") private _reviewRepo:IReviewRepository
     ){}
     async execute(pageNumber: number, pageSize: number, searchTerm: string,location?: [number, number],filter?:string): Promise<PagenateTurfs> {
-        let filterSearch:any= {status:"approved"};
+        let filterSearch: Record<string, any>= {status:"approved"};
         if(searchTerm){
             filterSearch.$or=[
                 {name:{$regex:searchTerm,$options:"i"}},

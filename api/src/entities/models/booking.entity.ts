@@ -10,12 +10,14 @@ export interface IBookingEntity {
     price: number;
     date: string;
     status:string;
+    game?:string;
     createdAt: Date;
 }
 
 export interface BookingDTO {
     id: string
     turfId: string
+    bookingId?:string
     turfName: string
     turfImage: string[]
     location:{

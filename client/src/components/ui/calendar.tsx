@@ -12,7 +12,7 @@ function Calendar({ className, ...props }: CalendarProps) {
     <div className={cn("p-3", className)}>
       <DayPicker
       classNames={{
-        day:"text-gray-400",
+        day:"text-white",
         caption_label: 'text-green-500 font-medium',
         week:"text-green"
       }}

@@ -6,6 +6,7 @@ import { handleErrorResponse } from "../../../shared/utils/errorHandler";
 import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
 import { ICreateChatRoomUseCase } from "../../../entities/useCaseInterfaces/chatRoom/ICreateChatRoomUseCase";
 import { IGetChatRoomByGameIdUseCase } from "../../../entities/useCaseInterfaces/chatRoom/IGetChatRoomByGameIdUseCase";
+import { INewsApiService } from "../../../entities/services/INewsApiService";
 
 @injectable()
 export class ChatRoomControllers{
@@ -13,6 +14,7 @@ export class ChatRoomControllers{
         @inject("IGetChatRoomUseCase") private _getChatRoomUseCase:IGetChatRoomUseCase,
         @inject("ICreateChatRoomUseCase") private _createChatRoomUseCase: ICreateChatRoomUseCase,
         @inject("IGetChatRoomByGameIdUseCase") private _getChatRoomByGameIdUseCase:IGetChatRoomByGameIdUseCase,
+        @inject("INewsApiService") private _newsApiServices:INewsApiService
     ){}
     
     async getChatRooms(req:Request,res:Response):Promise<void>{
@@ -26,8 +28,7 @@ export class ChatRoomControllers{
                 return 
             }
             const chatRooms = await this._getChatRoomUseCase.execute(userId);
-            console.log("chat rooms ",chatRooms);
-
+            const newsData= await this._newsApiServices.execute();
             if(!chatRooms){
                 res.status(HTTP_STATUS.NOT_FOUND).json({
                     success:false,
@@ -38,7 +39,8 @@ export class ChatRoomControllers{
                 res.status(HTTP_STATUS.OK).json({
                     success:true,
                     message:SUCCESS_MESSAGES.DATA_RETRIEVED,
-                    data:chatRooms
+                    data:chatRooms,
+                    newsData
                 })
                 return 
             }
@@ -51,7 +53,6 @@ export class ChatRoomControllers{
         try {
             const userId = (req  as CustomRequest)?.user?.id;
             const data = req.body;
-            console.log("create chat room data ",data);
             if(!userId){
                 res.status(HTTP_STATUS.UNAUTHORIZED).json({
                     success:false,
@@ -73,7 +74,6 @@ export class ChatRoomControllers{
     async getChatRoomByGameId(req:Request,res:Response):Promise<void>{
         try {
             const gameId = req.query.gameId as string;
-            console.log("game",gameId)
             if(!gameId){
                 res.status(HTTP_STATUS.BAD_REQUEST).json({
                     success:false,

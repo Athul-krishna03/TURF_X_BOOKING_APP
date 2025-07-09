@@ -7,6 +7,9 @@ import { userLogin } from "../../store/slices/user.slice";
 import { useLogin, useGoogleAuth } from "../../hooks/auth/useAuth";
 import { useToast } from "../../hooks/useToast";
 import { CredentialResponse } from "@react-oauth/google";
+import { useState } from "react";
+import ForgotPasswordModal from "../../components/modals/Forget-password-modal";
+import { sendForgotPasswordEmail } from "../../services/auth/authServices";
 
 const Login = () => {
   const { toast } = useToast();
@@ -14,6 +17,16 @@ const Login = () => {
   const navigate = useNavigate();
   const loginUser = useLogin();
   const googleLogin = useGoogleAuth();
+
+  const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
+
+  const handleForgotPassword = () => {
+    setIsForgotModalOpen(true);
+  };
+
+  const handleSendForgotPassword = async (email: string) => {
+    await sendForgotPasswordEmail(email,"user");
+  };
 
   const handleSubmit = async (values: FormValues) => {
     try {
@@ -62,6 +75,8 @@ const Login = () => {
     );
   };
 
+  
+
   return (
     <div className="flex flex-col md:flex-row h-screen w-full">
       {/* Left Panel - Login Form */}
@@ -70,7 +85,8 @@ const Login = () => {
 
           <FormikLoginForm 
               onSubmit={handleSubmit} 
-              onGoogleLogin={handleGoogleLogin} 
+              onGoogleLogin={handleGoogleLogin}
+              onForgotPassword={handleForgotPassword}
             />
 
         </div>
@@ -84,6 +100,11 @@ const Login = () => {
             "url('\\vecteezy_ai-generated-soccer-match-on-the-field_42054042.jpg')",
         }}
       ></div>
+      <ForgotPasswordModal
+        isOpen={isForgotModalOpen}
+        onClose={() => setIsForgotModalOpen(false)}
+        onSubmit={handleSendForgotPassword}
+      />
     </div>
   );
 };

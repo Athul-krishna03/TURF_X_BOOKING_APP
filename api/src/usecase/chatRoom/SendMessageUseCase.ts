@@ -30,8 +30,6 @@ export class SendMessageUseCase implements ISendMessageUseCase{
         readBy: []
     };
     const chatRoom = await this._chatRoomRepo.findById(chatRoomId);
-    const senderUser = await this._clientRepo.findById(userId)
-    console.log("chatRoom in sendMessageUseCase",chatRoom)
     for (const ids of chatRoom?.users || []) { 
         const user = await this._clientRepo.findById(ids);
         console.log("user in sendMessageUseCase",user)
@@ -61,7 +59,6 @@ export class SendMessageUseCase implements ISendMessageUseCase{
         }
 
     }
-    console.log("message inside usecase",message)
     await this._messageRepo.create(message);
 
     return message;

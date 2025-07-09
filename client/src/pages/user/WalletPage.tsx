@@ -24,7 +24,7 @@ export type WalletData = {
 const WalletPage =  () => {
     const [showBalance, setShowBalance] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 1;
+    const pageSize = 5;
     const [filter, setFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);

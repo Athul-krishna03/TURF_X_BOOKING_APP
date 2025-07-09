@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
 import { User } from '../../types/ChatRoomCommunityTypes';
 
+
 export interface Message {
   id: string;
   userId: string;
@@ -16,7 +17,7 @@ interface ChatRoomProps {
   gameId: string;
   userId: string;
 }
-const socket = io('http://localhost:5000', { autoConnect: false });
+const socket = io(import.meta.env.VITE_BACKEND_API, { autoConnect: false });
 
 const ChatRoom: React.FC<ChatRoomProps> = () => {
   const {gameId,userId} = useParams()

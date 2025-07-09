@@ -9,7 +9,7 @@ import { toast } from "sonner"
 
 
 const HostGamePage: React.FC = () => {
-  const { slotId ,duration } = useParams<{ slotId: string ,duration:string}>()
+  const { slotId ,duration,game} = useParams<{ slotId: string ,duration:string,game:string}>()
   console.log("dlot data duration",duration);
   
   const [slot, setSlot] = useState<Slot | null>()
@@ -86,6 +86,10 @@ if(!slot) return <div className="min-h-screen bg-gradient-to-b from-gray-900 to-
           <p className="text-gray-400 text-sm">Duration</p>
           <p className="font-medium">{Number(duration)} hour(s)</p>
         </div>
+        <div className="space-y-1">
+          <p className="text-gray-400 text-sm">Selected Game</p>
+          <p className="font-medium">{game}</p>
+        </div>
 
         <div className="space-y-1">
           <p className="text-gray-400 text-sm">Total Price</p>
@@ -161,6 +165,7 @@ if(!slot) return <div className="min-h-screen bg-gradient-to-b from-gray-900 to-
               onClose={() => setIsModalOpen(false)}
               onPaymentSuccess={handlePaymentSuccess}
               paymentType="full"
+              game={game && game || ""}
             />
     )}
     {
@@ -175,6 +180,7 @@ if(!slot) return <div className="min-h-screen bg-gradient-to-b from-gray-900 to-
         onPaymentSuccess={handlePaymentSuccess}
         paymentType="shared"
         playerCount={playerCount}
+        game={game && game || ""}
         />
       )
     }

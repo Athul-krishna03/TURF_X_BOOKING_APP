@@ -6,6 +6,7 @@ import { IChatRoomRepository } from "../../entities/repositoryInterface/chatRoom
 import { ClientModel } from "../database/models/client.model";
 import { IMessageRepository } from "../../entities/repositoryInterface/chatRoom/message-repository";
 import { Types } from "mongoose";
+import { config } from "../../shared/config";
 
 
 @injectable()
@@ -20,7 +21,7 @@ export class SocketServer{
     ){
         this.io = new Server(server,{
             cors:{
-                origin: 'http://localhost:5173', 
+                origin: config.cors.ALLOWED_ORGIN, 
                 methods: ['GET', 'POST','PATCH'],
             }
         });
@@ -29,11 +30,8 @@ export class SocketServer{
     private setupSocketEvents() {
         this.io.on('connection', (socket: Socket) => {
         console.log('User connected:', socket.id);
-        
         socket.on('joinGame', async (gameId: string, userId: string) => {
             try {
-                console.log("joined Game event",gameId,userId);
-                
                 const chatRoom = await this._chatRoomRepository.findByGameId(gameId);
                 if (!chatRoom) {
                     socket.emit('error', 'Chat room not found');
@@ -53,7 +51,6 @@ export class SocketServer{
                 });
 
                 const messages = await this._messageRepo.findByGameId(chatRoom.id);
-                console.log("users id ",chatRoom)
                 const users = await ClientModel.find(
                     { _id: {
                         $in: chatRoom.users.map(id => new Types.ObjectId(id))
@@ -61,8 +58,6 @@ export class SocketServer{
                 },
                     { name: 1, email: 1, profileImage: 1 } // Select specific fields
                 );
-
-                console.log("messages data",messages,"users list",users)
                 socket.emit('chatRoomData', {
                     messages, // list of message entities
                     users: users.map((u) => ({ id: u.id, username: u.name })),
@@ -103,23 +98,6 @@ export class SocketServer{
             socket.emit('error', 'Failed to send image');
             }
         });
-
-        // socket.on('reactToMessage', async (gameId: string,userId:string, messageId: string, reaction: string) => {
-        //     try {
-        //     const chatRoom = await this._chatRoomRepository.findByGameId(gameId);
-        //     if (!chatRoom) {
-        //         socket.emit('error', 'Chat room not found');
-        //         return;
-        //     }
-        //     await this._chatRoomRepository.addReaction(chatRoom.id, messageId, userId, reaction);
-        //     const updatedChatRoom = await this._chatRoomRepository.findByGameId(gameId);
-        //     const message = updatedChatRoom?.messages ? updatedChatRoom.messages.find((m:IMessageEntity) => m.id === messageId): [];
-        //     this.io.to(gameId).emit('messageUpdate', message);
-        //     } catch (err) {
-        //     socket.emit('error', 'Failed to add reaction');
-        //     }
-        // });
-
         socket.on('disconnect', () => {
             console.log('User disconnected:', socket.id);
         });

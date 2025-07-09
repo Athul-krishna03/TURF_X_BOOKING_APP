@@ -20,14 +20,7 @@ export class TurfDashBoardUseCase implements ITurfDashBoardUseCase {
         }
         const bookingData = await this._bookingRepo.findNormalByTurfId(turfData.turfId);
         const sharedBookingData = await this._bookingRepo.findSharedByTurfId(turfData.turfId);   
-
-        console.log("bookingData", bookingData);
-        console.log("sharedBookingData", sharedBookingData);
-
         const totalBookings = [...bookingData,...sharedBookingData]
-
-        console.log("totalBookings",totalBookings)
-
         const recentBookings = totalBookings
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
         .slice(0, 5)
@@ -39,23 +32,13 @@ export class TurfDashBoardUseCase implements ITurfDashBoardUseCase {
             status: b.status,
             price: b.price
         }));
-
-
-        // Generate weekly booking data
         const weeklyBookings = await this._dashboardService.generateDailyStats(totalBookings);
         const monthlyBookings = await this._dashboardService.generateMonthlyStats(totalBookings);
-
-        console.log("weeky booking",weeklyBookings)
-        console.log("monthly booking",monthlyBookings)
-
-       
         let wallet = null;
         if (turfData?.turfId) {
             wallet = await this._walletRepo.findByUserId(turfData.turfId, "turf");
         }
         const revenueStats = await this._dashboardService.generateRevenueStats(wallet?.transaction ?? []);
-        console.log("revenue", revenueStats);
-
         const data = {
             normalBooking: bookingData.length,
             sharedBooking: sharedBookingData.length,

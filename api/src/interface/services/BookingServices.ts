@@ -27,6 +27,7 @@ async bookSlot(input: {
     paymentIntentId: string;
     paymentType: "single" | "shared";
     playerCount?: number;
+    game:string;
     }) {
     const {
         userId,
@@ -38,6 +39,7 @@ async bookSlot(input: {
         paymentIntentId,
         paymentType,
         playerCount,
+        game
     } = input;
 
     const isPaymentValid = await this.paymentService.verifyPaymentIntent(paymentIntentId);
@@ -60,6 +62,7 @@ async bookSlot(input: {
         price,
         date,
         paymentType,
+        game,
         playerCount
     );
     if(paymentType == "single"){

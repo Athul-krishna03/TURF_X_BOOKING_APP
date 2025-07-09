@@ -4,18 +4,12 @@ import moment from "moment";
 interface HostedgameCardProps {
   game: any;
   onCancel?: (gameId: string,bookingType:string) => void;
+  userType?:string
 }
 
-export default function HostedgameCard({ game, onCancel }: HostedgameCardProps) {
+export default function HostedgameCard({ game , userType}: HostedgameCardProps) {
   console.log("HostedgameCard", game);
   const { turf } = game;
-
-  const handleCancel = () => {
-    if (onCancel && game.id) {
-      onCancel(game.id,"joined");
-    }
-  };
-
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'active':
@@ -39,6 +33,10 @@ export default function HostedgameCard({ game, onCancel }: HostedgameCardProps) 
   };
 
   const playerStatus = getPlayerStatus();
+  const sharePerPlayer = Math.round(game.price / playerStatus.max)
+  const totalAmount = (sharePerPlayer*playerStatus.current)/(1+0.05);
+  const platformfee = totalAmount*0.05;
+ 
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 overflow-hidden">
@@ -60,7 +58,7 @@ export default function HostedgameCard({ game, onCancel }: HostedgameCardProps) 
             </span>
             {game.status.toLowerCase() !== 'cancelled' && game.status.toLowerCase() !== 'completed' && (
               <button
-                onClick={handleCancel}
+                onClick={()=>{}}
                 className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
                 title="Cancel game"
               >
@@ -144,7 +142,7 @@ export default function HostedgameCard({ game, onCancel }: HostedgameCardProps) 
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Per Player</p>
               <p className="text-sm font-medium text-gray-700">
-                ₹{Math.round(game.price / playerStatus.max)}
+                ₹{sharePerPlayer}
               </p>
             </div>
           </div>
@@ -168,16 +166,21 @@ export default function HostedgameCard({ game, onCancel }: HostedgameCardProps) 
             Created {moment(game.createdAt).format("MMM D, h:mm A")}
           </div>
           <div className="flex gap-2">
-            {new Date(game.createdAt) > new Date() && game.status.toLowerCase() !== 'cancelled' && (
+            {new Date(game.date) > new Date() && game.status.toLowerCase() !== 'cancelled'  && userType != "admin" && (
               <div className="flex gap-2">
                 <button
-                  onClick={handleCancel}
+                  onClick={()=>{}}
                   className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition-colors"
                 >
                   Cancel game
                 </button>
               </div>
             )}
+            {userType == "admin" &&
+              <div className="text-m text-black p-5 font-medium">
+                {`Plat from Fee: ${platformfee}`}
+              </div>
+            }
 
           
           </div>

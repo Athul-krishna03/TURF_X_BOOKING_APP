@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice,PayloadAction} from "@reduxjs/toolkit";
 import { Turf } from "../../types/Type";
-import { turfAxiosInstance } from "../../api/turf.axios";
+import { axiosInstance } from "../../api/private.axios";
 
 
 interface UserState{
@@ -34,7 +34,7 @@ export const updateTurfDetails = createAsyncThunk<Turf,updateTurfProfilePayload,
     "turf/updateProfile",
     async(profileData,{rejectWithValue})=>{
         try {
-            const response = await turfAxiosInstance.patch('/_ts/turf/updateProfile',profileData);
+            const response = await axiosInstance.patch('/_ts/turf/updateProfile',profileData);
             console.log("edit profile response in thunk",response)
             return response.data.data;
         } catch (error:any) {

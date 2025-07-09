@@ -3,6 +3,7 @@ import { IChatRoomEntity } from "../../entities/models/chatRoom.entity";
 import { IGetChatRoomUseCase } from "../../entities/useCaseInterfaces/chatRoom/IGetChatRoomUseCase";
 import { IChatRoomRepository } from "../../entities/repositoryInterface/chatRoom/chat-room-repository";
 
+
 @injectable()
 export class GetChatRoomUseCase implements IGetChatRoomUseCase{
     constructor(

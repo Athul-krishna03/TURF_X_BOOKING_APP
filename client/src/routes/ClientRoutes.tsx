@@ -43,7 +43,7 @@ export function UserRoutes(){
             element={<ProtectedRoutes allowedRoles={['user']} element={<WalletPage/>}/>}
             />
             <Route
-                path="/user/hostGame/:slotId/:duration"
+                path="/user/hostGame/:slotId/:duration/:game"
                 element={<ProtectedRoutes allowedRoles={['user']} element={<HostGamePage />} />}
             />
             <Route

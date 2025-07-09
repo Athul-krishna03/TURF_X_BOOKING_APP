@@ -13,10 +13,7 @@ export class GetAllBookingDataUseCase implements IGetAllBookingDataUseCase{
         @inject("IBookingRepository")
         private bookingRepo: IBookingRepository,
         @inject("ITurfRepository")
-        private turfRepo: ITurfRepository,
-        @inject("ISlotRepository")
-        private slotRepo:ISlotRepository
-    ){}
+        private turfRepo: ITurfRepository    ){}
     async execute(userId:string): Promise<{normal:IBookingEntity[],hosted:ISharedBookingEntity[]}> {
         const turfData = await this.turfRepo.findById(userId);
         if (!turfData) {
@@ -29,7 +26,7 @@ export class GetAllBookingDataUseCase implements IGetAllBookingDataUseCase{
         const enrichedHosted = [];
 
     for (const booking of normalGame) {
-        const turfDetails = await this.turfRepo.getTurfByTurfId(booking.turfId); // Your existing method
+        const turfDetails = await this.turfRepo.getTurfByTurfId(booking.turfId);
         enrichedNormal.push({
         ...booking,
         turf: turfDetails,

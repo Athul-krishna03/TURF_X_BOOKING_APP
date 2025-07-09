@@ -10,6 +10,7 @@ export const BookingSchema = new Schema<IBookingModel>(
     time: { type: String, required: true }, 
     duration: { type: Number, required: true },
     price: { type: Number, required: true },
+    game:{type:String,default:"Football"},
     status: {
         type: String,
         enum: ["Booked", "Cancelled","Pending"],

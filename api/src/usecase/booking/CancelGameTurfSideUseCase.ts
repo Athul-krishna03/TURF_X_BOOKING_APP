@@ -6,12 +6,14 @@ import { ICancelGameTurfSideUseCase } from "../../entities/useCaseInterfaces/boo
 import { IWalletSercvices } from "../../entities/services/IWalletServices";
 import { NotificationType } from "../../shared/constants";
 import { IPushNotificationService } from "../../entities/services/IPushNotificationService";
+import { ISlotService } from "../../entities/services/ISlotService";
 
 @injectable()
 export class CancelGameTurfSideUseCase  implements ICancelGameTurfSideUseCase {
     constructor(
         @inject('IBookingRepository') private _bookingRepo: IBookingRepository,
         @inject('IWalletSercvices') private _walletService: IWalletSercvices,
+        @inject("ISlotService") private _slotService:ISlotService,
         @inject("IPushNotificationService") private _pushNotificationService:IPushNotificationService
     ) {}
 
@@ -23,6 +25,7 @@ export class CancelGameTurfSideUseCase  implements ICancelGameTurfSideUseCase {
                 const booking = await this._bookingRepo.cancelNormalGame(bookingId);
                 
                 if(booking){
+                    await this._slotService.cancelTheSlots(booking);
                     try {
                         const data ={
                         type: "credit",
@@ -49,6 +52,7 @@ export class CancelGameTurfSideUseCase  implements ICancelGameTurfSideUseCase {
             }else{
                 const booking = await this._bookingRepo.cancelGame({bookingId, userId: "", isHost: true});
                 if(booking){
+                    await this._slotService.cancelTheSlots(booking)
                     for(let users of booking.userIds){
                         try {
                             const data={

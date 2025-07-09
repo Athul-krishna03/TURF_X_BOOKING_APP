@@ -1,4 +1,4 @@
-import { ClientProfileResponse } from "../../../shared/dtos/user.dto";
+import { ClientProfileResponse } from "../../../shared/responseTypes/clientProfileResponse";
 import { IClientEntity } from "../../models/client.entity";
 
 export interface IUpdateProfileUseCase{

@@ -110,6 +110,15 @@ import { IAddReviewUseCase } from "../../entities/useCaseInterfaces/review/IAddR
 import { AddReviewUseCase } from "../../usecase/review/addReviewUsecase";
 import { IGetReviewUseCase } from "../../entities/useCaseInterfaces/review/IGetReviewUseCase";
 import { GetReviewUseCase } from "../../usecase/review/getReviewUseCase";
+import { IGetRevenueDataUseCase } from "../../entities/useCaseInterfaces/admin/IGetRevenueDataUseCase";
+import { GetRevenueDataUseCase } from "../../usecase/admin/GetRevenueDataUseCase";
+import { NewsApiService } from "../newsApi/NewsApiService";
+import { register } from "module";
+import { INewsApiService } from "../../entities/services/INewsApiService";
+import { IForgotPasswordUseCase } from "../../entities/useCaseInterfaces/auth/IForgotPasswordUseCase";
+import { ForgotPasswordUseCase } from "../../usecase/auth/ForgotPasswordUseCase";
+import { IResetPasswordUseCase } from "../../entities/useCaseInterfaces/auth/IResetPasswordUseCase";
+import { ResetPasswordUseCase } from "../../usecase/auth/ResetPasswordUseCase";
 
 export class UseCaseRegistery {
   static registerUseCases(): void {
@@ -274,6 +283,10 @@ export class UseCaseRegistery {
       useClass: DashBoardServices 
     });
 
+    container.register<INewsApiService>("INewsApiService",{
+      useClass:NewsApiService
+    })
+
     container.register<IGetUserWalletDetailsUseCase>("IGetUserWalletDetailsUseCase", {
       useClass: GetUserWalletDetailsUseCase,
     });
@@ -324,6 +337,16 @@ export class UseCaseRegistery {
 
     container.register<IGetReviewUseCase>("IGetReviewUseCase",{
       useClass:GetReviewUseCase
+    })
+
+    container.register<IGetRevenueDataUseCase>("IGetRevenueDataUseCase",{
+      useClass:GetRevenueDataUseCase
+    })
+    container.register<IForgotPasswordUseCase>("IForgotPasswordUseCase",{
+      useClass:ForgotPasswordUseCase
+    })
+    container.register<IResetPasswordUseCase>("IResetPasswordUseCase",{
+      useClass:ResetPasswordUseCase
     })
     //Register Strategy
     container.register("ClientRegisterStrategy", {

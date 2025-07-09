@@ -22,8 +22,6 @@ export class UpdateTurfPassWordUseCase implements IUpdateTurfPassWordUseCase{
             )
         }
         const isPasswordMatch = await this.passwordBcrypt.compare(currentPassword,user.password);
-        console.log("pass match",isPasswordMatch);
-
         if(!isPasswordMatch){
             throw new CustomError(
                 ERROR_MESSAGES.WRONG_CURRENT_PASSWORD,
@@ -31,7 +29,6 @@ export class UpdateTurfPassWordUseCase implements IUpdateTurfPassWordUseCase{
             )
         }
         const isCurrentMatchWithOld = await this.passwordBcrypt.compare(newPassword,user.password);
-        console.log("hai    ",isCurrentMatchWithOld)
         if(isCurrentMatchWithOld){
             throw new CustomError(
                 ERROR_MESSAGES.SAME_CURR_NEW_PASSWORD,
@@ -39,8 +36,7 @@ export class UpdateTurfPassWordUseCase implements IUpdateTurfPassWordUseCase{
             )
         }
         
-        const hashedPassword = await this.passwordBcrypt.hash(newPassword);
-        console.log(hashedPassword);
+        const hashedPassword = await this.passwordBcrypt.hash(newPassword)
         await this.turfRepo.findByIdAndUpdatePassWord(userId,hashedPassword);
 
     }
