@@ -25,15 +25,16 @@ export const logoutAdmin = async () => {
   return response.data;
 };
 
-export const updateStatus = async (turfId: string) => {
+export const updateStatus = async (userId: string) => {
+  console.log("Updating user status for ID:", userId);
   try {
     const reponse = await axiosInstance.patch(
-      ADMIN_ROUTES.UPDATE_USER_STATUS(turfId),
+      ADMIN_ROUTES.UPDATE_USER_STATUS(userId),
       {}
     );
     return reponse.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Failed to update status");
+  } catch (error: unknown) {
+    throw new Error((error as Error).message || "Failed to update status");
   }
 };
 
@@ -43,8 +44,8 @@ export const updateTurfStatus = async (turfId: string) => {
       {}
     );
     return reponse.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Failed to update status");
+  } catch (error: unknown) {
+    throw new Error((error as Error).message || "Failed to update status");
   }
 };
 
@@ -96,8 +97,8 @@ export const updateRequestStatus = async (
       { status, reason }
     );
     return reponse.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Failed to update status");
+  } catch (error: unknown) {
+    throw new Error((error as Error).message || "Failed to update status");
   }
 };
 
@@ -105,7 +106,7 @@ export const getAdminDashBoardData = async () => {
   try {
     const response = await axiosInstance.get(ADMIN_ROUTES.GET_ADMIN_DASHBOARD_DATA);
     return response.data.dashBoardData;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching admin dashboard data:", error);
     throw new Error("Failed to fetch admin dashboard data");
   }

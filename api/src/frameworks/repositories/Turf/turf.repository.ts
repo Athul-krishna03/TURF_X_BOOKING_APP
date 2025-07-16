@@ -4,7 +4,7 @@ import { ITurfEntity } from "../../../entities/models/turf.entity";
 import { ITurfModel, TurfModel } from "../../database/models/turf.model";
 import { TurfProfileResponse } from "../../../shared/responseTypes/turfProfileResponse";
 import { BaseRepository } from "../base.repository";
-import { PipelineStage } from "mongoose";
+import { FilterQuery, PipelineStage } from "mongoose";
 
 @injectable()
 export class TurfRepository
@@ -29,7 +29,7 @@ export class TurfRepository
   }
 
   async find(
-    filter: any,
+    filter: FilterQuery<ITurfModel>,
     skip: number,
     limit: number,
     location?: [number, number]

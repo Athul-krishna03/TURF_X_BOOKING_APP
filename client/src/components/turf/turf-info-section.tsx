@@ -9,7 +9,7 @@ interface TurfInfoSectionProps {
   turfData: ITurf
 }
 
-const amenityIcons: Record<string, { icon: any; description: string }> = {
+const amenityIcons: Record<string, { icon: React.ElementType; description: string }> = {
   Parking: { icon: Car, description: "Free parking available" },
   Toilet: { icon: Droplets, description: "Clean washroom facilities" },
   "Changing Rooms": { icon: ShowerHead, description: "Changing rooms available" },

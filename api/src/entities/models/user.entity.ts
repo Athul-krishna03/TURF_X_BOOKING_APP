@@ -2,7 +2,7 @@ import { TRole } from "../../shared/constants";
 export interface IUserEntity{
     id?: string;
     name?: string;
-    email?: any;
+    email?: string;
     password: string;
     phone?: string;
     profileImage?: string;
@@ -13,6 +13,5 @@ export interface IUserEntity{
     bio:string,
     isBlocked: Boolean;
     fcmToken?:string
-    // only for normal player user
     position?:string;
 }

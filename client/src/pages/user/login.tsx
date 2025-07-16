@@ -3,7 +3,7 @@ import FormikLoginForm from "../../components/auth/LoginForm";
 import { LoginData as FormValues } from "../../types/Type";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { userLogin } from "../../store/slices/user.slice";
+import {  userLogin } from "../../store/slices/user.slice";
 import { useLogin, useGoogleAuth } from "../../hooks/auth/useAuth";
 import { useToast } from "../../hooks/useToast";
 import { CredentialResponse } from "@react-oauth/google";
@@ -43,10 +43,10 @@ const Login = () => {
         duration: 3000,
       });
      }
-    } catch (error:any) {
+    } catch (error:unknown) {
       toast({
         title: "Error",
-        description: error.message || "Failed to login.",
+        description: (error as Error).message || "Failed to login.",
         variant: "destructive",
         duration: 3000,
       });
@@ -58,7 +58,7 @@ const Login = () => {
     console.log("login")
     googleLogin.mutate(
       {
-        credential: credentialResponse.credential,
+        credential: credentialResponse?.credential || "",
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
         role: "user",
       },

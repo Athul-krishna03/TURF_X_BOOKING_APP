@@ -5,6 +5,7 @@ import { ITurfRepository } from "../../entities/repositoryInterface/turf/ITurfRe
 import { IGetUserBookingDetialsUseCase } from "../../entities/useCaseInterfaces/user/IGetUserBookingDetialsUseCase";
 import { BookingDTO } from "../../entities/models/booking.entity";
 import { ISharedBookingEntity } from "../../entities/models/sharedBooking.entity";
+import { Types } from "mongoose";
 
 @injectable()
 export class GetUserBookingDetialsUseCase implements IGetUserBookingDetialsUseCase {
@@ -67,7 +68,8 @@ export class GetUserBookingDetialsUseCase implements IGetUserBookingDetialsUseCa
     // Joined Shared Games
     const joinedGamesData = await this.bookingRepo.find();
     const userJoinedGames = joinedGamesData.filter((game: ISharedBookingEntity) =>
-        game.userIds.some((val) => val._id.toString() === userId)
+        Array.isArray(game.userIds) &&
+        (game.userIds as Types.ObjectId[]).some((val) => val._id.toString() === userId)
     );
 
     const upcomingJoined: any[] = [];

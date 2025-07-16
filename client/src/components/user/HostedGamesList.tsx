@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 
 export interface HostedGame {
-  userIds: any[];
+  userIds: { name: string }[];
   _id: string;
   title: string;
   hostName: string;

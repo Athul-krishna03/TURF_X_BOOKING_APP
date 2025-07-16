@@ -2,8 +2,11 @@ import { Navigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 import { RootState } from '../../store/store';
+import { ReactElement } from "react";
 
-
+interface GuestRoutesProps {
+    element: ReactElement;
+}
 
 const useAuth = () => {
     const user = useSelector((state: RootState) => state?.user.user);
@@ -13,7 +16,7 @@ const useAuth = () => {
     return { user, admin,turf};
 };
 
-export const GuestRoutes = ({ element }: any) => {
+export const GuestRoutes = ({ element }: GuestRoutesProps) => {
     const { user, admin,turf } = useAuth();
     console.log("turf",turf);
     

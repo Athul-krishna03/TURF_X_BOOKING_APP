@@ -17,13 +17,15 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
   ): Promise<ClientProfileResponse> {
     
     const isExist = await this.clientRepo.findById(clientId);
-    const isEmailEXist = await this.clientRepo.findByEmail(data?.email)
-    if(isEmailEXist && isEmailEXist.email != data.email){  
-      throw new CustomError(
-        "user with same email exist",
-        HTTP_STATUS.BAD_REQUEST
-      )
-      
+    let isEmailEXist: IClientEntity | null = null;
+    if (data.email) {
+      isEmailEXist = await this.clientRepo.findByEmail(data.email);
+      if (isEmailEXist && isEmailEXist.email !== data.email) {
+        throw new CustomError(
+          "user with same email exist",
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
     }
     if (!isExist) {
       throw new CustomError(

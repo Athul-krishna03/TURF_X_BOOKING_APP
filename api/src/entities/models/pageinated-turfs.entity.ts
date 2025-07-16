@@ -1,6 +1,7 @@
+import { TurfDto } from "../../shared/utils/MappingTurfData";
 import { ITurfEntity } from "./turf.entity";
 
-export interface PagenateTurfs{
-    turfs:ITurfEntity[] | [],
-    total:number
+export interface PagenateTurfs {
+    turfs: TurfDto[] | [];
+    total: number;
 }

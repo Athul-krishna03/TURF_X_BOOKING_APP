@@ -3,8 +3,8 @@ import { IClientEntity } from "../../models/client.entity";
 
 export interface IGoogleAuthUseCase {
     execute(
-        credentials:any,
-        client_id:any,
+        credentials:string,
+        client_id:string,
         role:TRole
     ):Promise<Partial<IClientEntity>>
 }

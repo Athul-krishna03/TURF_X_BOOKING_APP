@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Sidebar } from "../../components/layout/Sidebar";
 import { Pagination1 } from "../../components/admin/Pagination";
+import { RootState } from "../../store/store";
 
 export default function BookingsPage() {
   const [upcomingPage, setUpcomingPage] = useState(1);
@@ -33,7 +34,7 @@ export default function BookingsPage() {
   const [joinedUpcomingPage, setJoinedUpcomingPage] = useState(1);
   const [joinedPastPage, setJoinedPastPage] = useState(1);
   const ITEMS_PER_PAGE = 3;
-  const user = useSelector((state: any) => state.user.user)
+  const user = useSelector((state: RootState) => state.user.user)
   const [activeTab, setActiveTab] = useState("upcoming");
   const [joinedActiveTab, setJoinedActiveTab] = useState("upcoming");
   const [bookingType,setBookingType] = useState("single")
@@ -131,8 +132,8 @@ export default function BookingsPage() {
 
     }else{
       const bookingId = joinedBooking?joinedBooking.id:null
-      const isHost = joinedBooking?joinedBooking.joinedUsers[0]._id == user.id : false
-      console.log("isHost",isHost,joinedBooking?.joinedUsers[0]._id,user.id);
+      const isHost = joinedBooking?joinedBooking.joinedUsers[0]._id == user?.id : false
+      console.log("isHost",isHost,joinedBooking?.joinedUsers[0]._id,user?.id);
       const result  = await cancelBooking(bookingId,bookingType,isHost)
       if(result){
         toast.success("Joined game cancelled successfully");

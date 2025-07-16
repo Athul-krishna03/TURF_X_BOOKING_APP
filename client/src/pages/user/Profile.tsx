@@ -15,14 +15,13 @@ import { toast } from "sonner"
 import { profileSchema } from "../../utils/validations/profileValidator"
 import { uploadProfileImageCloudinary } from "../../utils/cloudinaryImageUpload"
 import { type updateProfilePayload, updateUserProfile } from "../../store/slices/user.slice"
-import {type AppDispatch } from "../../store/store"
+import {RootState, type AppDispatch } from "../../store/store"
 import ChangePassword from "../../components/modals/change-password"
 import { useUserChangePassword } from "../../hooks/user/userDashboard"
 import { Sidebar } from "../../components/layout/Sidebar"
 
 const Profile = () => {
-  const user = useSelector((state: any) => state.user.user)
-  console.log("user in profile page", user)
+  const user = useSelector((state: RootState) => state.user.user)
   const navigate = useNavigate()
   const [editMode, setEditMode] = useState(false)
   const [showPasswordChange, setShowPasswordChange] = useState(false)
@@ -37,9 +36,9 @@ const Profile = () => {
   };
 
   const [formData, setFormData] = useState({
-    name: user.name,
-    email: user.email,
-    phone: user.phone,
+    name: user?.name,
+    email: user?.email,
+    phone: user?.phone,
     position: user?.position,
   })
 
@@ -82,8 +81,8 @@ const Profile = () => {
 
   const saveChanges = async () => {
     const updatedData = {
-      name: formData.name.trim(),
-      phone: formData.phone.trim() || null,
+      name: formData.name && formData.name.trim(),
+      phone: formData.phone && formData.phone.trim(),
     }
 
     try {
@@ -96,7 +95,7 @@ const Profile = () => {
       }
 
       const profileData: updateProfilePayload = {
-        name: updatedData.name,
+        name: updatedData.name && updatedData.name.trim() || "",
         phone: updatedData.phone || "",
         profileImage: imageUrl,
       }
@@ -107,16 +106,20 @@ const Profile = () => {
       } else {
         toast.error("Error in editing profile")
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof Yup.ValidationError) {
         const validationErrors: Record<string, string> = {}
-        error.inner.forEach((err: any) => {
-          validationErrors[err.path] = err.message
-        })
+        error.inner.forEach((err) => {
+          if (err.path) {
+            validationErrors[err.path] = err.message;
+          }
+        });
         setFormErrors(validationErrors)
         toast.error("Please correct the validation errors")
       } else {
-        toast.error(`Failed updating user profile: ${error.message || "Unknown error"}`)
+        error instanceof Error
+          ? toast.error(`Failed updating user profile: ${error.message}`)
+          : toast.error(`Failed updating user profile: Unknown error`)
       }
     }
 
@@ -129,7 +132,7 @@ const Profile = () => {
       if (response.success) toast.success("User Password updated successfully")
       setShowPasswordChange(false)
       return Promise.resolve()
-    } catch (error: any) {
+    } catch (error) {
       toast.error("Error in updating password")
       return Promise.reject(error)
     }

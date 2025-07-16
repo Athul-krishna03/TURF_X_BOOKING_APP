@@ -18,10 +18,10 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase{
         this.oAuthClient=new OAuth2Client()
     }
 
-    async execute(credentials: any, client_id: any, role: TRole): Promise<Partial<IClientEntity>> {
+    async execute(credentials: string , client_id: string, role: TRole): Promise<Partial<IClientEntity>> {
         const ticket = await this.oAuthClient.verifyIdToken({
-            idToken:credentials,
-            audience:client_id
+            idToken: credentials,
+            audience: client_id
         });
 
         const payload = ticket.getPayload();

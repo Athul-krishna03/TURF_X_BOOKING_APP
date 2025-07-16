@@ -15,6 +15,7 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { PaymentModal } from "../booking/payment-modal";
 import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 interface HostedGameDialogProps {
     game: HostedGame | null;
@@ -33,7 +34,7 @@ const HostedGameDialog = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const price = game.amountPerPlayer;
   const navigate = useNavigate();
-  const user = useSelector((state: any) => state.user.user);
+  const user = useSelector((state: RootState) => state.user.user);
 
   const handlePaymentSuccess = () => {
     setIsModalOpen(false);
@@ -146,10 +147,10 @@ const HostedGameDialog = ({
               disabled={
                 game.status !== "Pending" ||
                 game.playersJoined >= game.playerCount ||
-                game.userIds.some((val: any) => val.name === user.name)
+                game.userIds.some((val: { name: string }) => val.name === user?.name)
               }
             >
-              {game.userIds.some((val: any) => val.name === user.name)
+              {game.userIds.some((val: { name: string }) => val.name === user?.name)
                 ? "Already Joined"
                 : game.status === "Pending"
                 ? "Join Game"

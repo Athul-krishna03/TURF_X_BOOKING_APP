@@ -7,7 +7,6 @@ import { IUpdateTurfPassWordUseCase } from "../../entities/useCaseInterfaces/tur
 
 @injectable()
 export class UpdateTurfPassWordUseCase implements IUpdateTurfPassWordUseCase{
-    clientRepo: any;
     constructor(
         @inject("ITurfRepository") private turfRepo: ITurfRepository,
         @inject("IPasswordBcrypt") private passwordBcrypt:IBcrypt

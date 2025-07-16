@@ -20,7 +20,6 @@ const SlotForm: React.FC<SlotFormProps> = ({ selectedDate, setSelectedDate }) =>
   const [duration, setDuration] = useState<number>(60)
   const [price, setPrice] = useState<number>(0)
 
-  // New state for date range
   const [endDate, setEndDate] = useState<string>(selectedDate)
   const [generationMode, setGenerationMode] = useState<"single" | "range">("single")
 

@@ -4,6 +4,7 @@ import { IBookingRepository } from "../../entities/repositoryInterface/booking/I
 import { ISharedBookingEntity } from "../../entities/models/sharedBooking.entity";
 import { ITurfRepository } from "../../entities/repositoryInterface/turf/ITurfRepository";
 import { ITurfEntity } from "../../entities/models/turf.entity";
+import { mapTurfData, TurfDto } from "../../shared/utils/MappingTurfData";
 
 @injectable()
 export class GetJoinedGameDetials implements IGetJoinedGameDetialsUseCase{
@@ -11,12 +12,13 @@ export class GetJoinedGameDetials implements IGetJoinedGameDetialsUseCase{
         @inject("IBookingRepository") private _bookingRepo:IBookingRepository,
         @inject("ITurfRepository") private _turfRepo:ITurfRepository
     ){}
-    async execute(bookingId: string): Promise<{booking: ISharedBookingEntity; turf: ITurfEntity | null;}> {
+    async execute(bookingId: string): Promise<{booking: ISharedBookingEntity; turf: TurfDto | null;}> {
         const data = await this._bookingRepo.findById(bookingId)
         const turfData = await this._turfRepo.getTurfByTurfId(data.turfId)
+        let result = mapTurfData([turfData as ITurfEntity]);
         return {
             booking:data,
-            turf:turfData
+            turf:result[0]
         }
     }
 }

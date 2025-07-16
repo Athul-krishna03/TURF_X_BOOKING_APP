@@ -54,7 +54,7 @@ export default function AdminDashboardComponent() {
         sharedBooking: adminDashBoardData.normalBooking || 0,
         },
         topTurfs:
-        adminDashBoardData.topTurfs?.map((turf: any) => ({
+        adminDashBoardData.topTurfs?.map((turf:{name:string, bookings:number}) => ({
             name: turf.name,
             value: turf.bookings,
         })) || [],

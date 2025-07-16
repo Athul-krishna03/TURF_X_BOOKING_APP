@@ -52,7 +52,6 @@ export type TurfDashBoardData = {
     normalBooking?: number;
     sharedBooking?: number;
     walletBalance?: number;
-    turfDashBoardData?: any[];
     weeklyBookings?: BookingTrends;
     monthlyBookings?: BookingTrends;
     revenueStats?: BookingTrends;

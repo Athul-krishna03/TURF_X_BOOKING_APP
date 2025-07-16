@@ -96,11 +96,12 @@ const PaymentForm: React.FC<PaymentFormProps & { clientSecret: string; slotLockI
           onSuccess();
         }
       }
-    } catch (error: any) {
-      setError(error.message || "An error occurred during payment");
+    } catch (error: unknown) {
+      const e = error as Error;
+      setError(e.message || "An error occurred during payment");
       setProcessing(false);
-      toast.error(error.message);
-      console.error("Payment error:", error);
+      toast.error(e.message);
+      console.error("Payment error:", e);
     }
   };
 
