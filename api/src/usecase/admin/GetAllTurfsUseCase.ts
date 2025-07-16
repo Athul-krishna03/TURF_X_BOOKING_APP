@@ -3,6 +3,7 @@ import { IGetAllTurfUseCase } from "../../entities/useCaseInterfaces/admin/IGetA
 import { PagenateTurfs } from "../../entities/models/pageinated-turfs.entity";
 import { ITurfRepository } from "../../entities/repositoryInterface/turf/ITurfRepository";
 import { IReviewRepository } from "../../entities/repositoryInterface/review/review-reposistory.interface";
+import { mapTurfData } from "../../shared/utils/MappingTurfData";
 
 @injectable()
 export class GetAllTurfsUseCase implements IGetAllTurfUseCase{
@@ -12,7 +13,7 @@ export class GetAllTurfsUseCase implements IGetAllTurfUseCase{
         @inject("IReviewRepository") private _reviewRepo:IReviewRepository
     ){}
     async execute(pageNumber: number, pageSize: number, searchTerm: string,location?: [number, number],filter?:string): Promise<PagenateTurfs> {
-        let filterSearch: Record<string, any>= {status:"approved"};
+        let filterSearch: Record<string, unknown>= {status:"approved"};
         if(searchTerm){
             filterSearch.$or=[
                 {name:{$regex:searchTerm,$options:"i"}},
@@ -38,9 +39,10 @@ export class GetAllTurfsUseCase implements IGetAllTurfUseCase{
         if(filter=="top"){
             enrichedTurfs.sort((a,b)=>b.reviewStats.averageRating-a.reviewStats.averageRating)
         }
+        let result = mapTurfData(enrichedTurfs);
 
         const response: PagenateTurfs = {
-            turfs: enrichedTurfs,
+            turfs: result,
             total: Math.ceil(total / vaildPageSize)
         };
             return response

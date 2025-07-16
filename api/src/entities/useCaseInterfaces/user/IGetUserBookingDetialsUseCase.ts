@@ -6,8 +6,8 @@ export interface IGetUserBookingDetialsUseCase{
     upcoming: BookingDTO[],
     past: BookingDTO[],
     joinedGames: {
-        upcoming: any[],
-        past: any[]
+        upcoming: ISharedBookingEntity[],
+        past: ISharedBookingEntity[]
     }
     }>
 }

@@ -22,7 +22,7 @@ export class BookingRepository implements IBookingRepository {
 
   async getAllBooking(): Promise<IBookingEntity[]> {
     const result = await BookingModel.find()
-      .populate("userId")
+      .populate("userId","name email profileImage")
       .sort({ createdAt: -1 });
     return result as IBookingEntity[];
   }
@@ -60,7 +60,7 @@ export class BookingRepository implements IBookingRepository {
 
   async findById(id: string): Promise<ISharedBookingEntity> {
     const data = await SharedSlotBookingModel.findById({ _id: id })
-      .populate("userIds")
+      .populate("userIds","name email profileImage")
       .sort({ createdAt: -1 });
     return data as ISharedBookingEntity;
   }

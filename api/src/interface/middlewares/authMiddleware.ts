@@ -66,8 +66,8 @@ try {
         refresh_token:token.refresh_token
     };
     next();
-} catch (error:any) {
-    if(error.name === "TokenExpiredError"){
+} catch (error:unknown) {
+    if((error as { name: string }).name === "TokenExpiredError"){
     res
     .status(HTTP_STATUS.UNAUTHORIZED)
     .json({message:ERROR_MESSAGES.TOKEN_EXPIRED});

@@ -36,7 +36,7 @@ export class SlotController implements ISlotController {
       const { bookedSlots } = await this._slotBookingService.bookSlot({ ...bookingData, userId });
 
       res.status(HTTP_STATUS.OK).json({ success: true, bookedSlots });
-    } catch (error: any) {
+    } catch (error) {
       console.error("Slot update failed:", error);
       handleErrorResponse(res, error);
     }

@@ -7,6 +7,7 @@ import { ClientProfileResponse } from "../../../shared/responseTypes/clientProfi
 import { BaseRepository } from "../base.repository";
 import { CustomError } from "../../../entities/utils/custom.error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
+import { FilterQuery } from "mongoose";
 
 @injectable()
 export class ClientRepository
@@ -27,7 +28,7 @@ export class ClientRepository
   }
 
   async find(
-    filter: any,
+    filter: FilterQuery<IClientModel>,
     skip: number,
     limit: number
   ): Promise<{ users: IClientEntity[] | []; total: number }> {

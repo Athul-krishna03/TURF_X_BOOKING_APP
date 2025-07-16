@@ -37,7 +37,7 @@ export const NotificationCenter = ({ open, onOpenChange }: NotificationCenterPro
 
     useEffect(() => {
         if (notificationsData?.data) {
-        const formatted = notificationsData.data.map((n: any) => ({
+        const formatted = notificationsData.data.map((n: {_id:string,title:string,message:string,createdAt:string,type:NotificationType,isRead:boolean}) => ({
             id: n._id,
             title: n.title,
             message: n.message,

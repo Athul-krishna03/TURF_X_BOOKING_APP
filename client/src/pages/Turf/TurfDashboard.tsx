@@ -9,6 +9,7 @@ import { DashboardLoadingSkeleton } from "../../components/ui/loading/loading-sk
 
 export default function TurfDashboard() {
   const [turfDashBoardData, setTurfDashBoardData] = useState<TurfDashBoardData>()
+  console.log("turf dashboard data", turfDashBoardData)
 
   useEffect(() => {
     const fetchDashBoardData = async () => {

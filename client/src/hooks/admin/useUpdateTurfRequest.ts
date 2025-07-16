@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToaster } from "../useToaster";
 import { turfReponse } from "./useGetAllTurfs";
 import { ITurf } from "../../types/Type";
+import { customError } from "../../store/slices/user.slice";
 
 
 export const useUpdateTurfRequest = (currentPage: number, limit: number, search: string) => {
@@ -35,7 +36,7 @@ export const useUpdateTurfRequest = (currentPage: number, limit: number, search:
             successToast(data.message); 
             queryClient.invalidateQueries({ queryKey: ["turfRequest", currentPage, limit, search] });
         },
-        onError: (error: any) => {
+        onError: (error: customError) => {
             errorToast(error.response?.data?.message || "An error occurred while updating seller status");
         },
     });

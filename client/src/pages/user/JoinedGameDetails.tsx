@@ -15,6 +15,7 @@ import { useGetChatRoomByGameId } from "../../hooks/user/chatRoom/useGetChatRoom
 import { useGetJoinedGameDetials } from "../../hooks/user/useGetJoinedGameDetials"
 import MapLocationPicker from "../../components/turf/turfDetialsComponents/map-location-picker"
 import { LocationCoordinates } from "../../types/TurfTypes"
+import { RootState } from "../../store/store"
 
 const JoinedGameDetails = () => {
   const { joinedGameId } = useParams()
@@ -47,7 +48,7 @@ const JoinedGameDetails = () => {
     }
   }, [chatRoomData]);
 
-  const user = useSelector((state: any) => state.user.user)
+  const user = useSelector((state: RootState) => state.user.user)
   const { mutateAsync: createChatRoom } = useCreateChatRoom();
   const handleCreateChatRoom = async (roomData: any) => {
     try {
@@ -55,7 +56,7 @@ const JoinedGameDetails = () => {
         ...roomData,
         hostId:joinedGameData?.booking.userIds[0]._id,
         gameId: joinedGameData?.booking._id,
-        users: joinedGameData?.booking.userIds.map((u: any) => u._id) || [],
+        users: joinedGameData?.booking.userIds.map((u:{_id:string}) => u._id) || [],
       })
 
       if (data) {

@@ -2,7 +2,7 @@
 
 export interface ISharedBookingEntity {
     id: string;
-    userIds: any[];
+    userIds: string[];
     bookingId?: string;
     walletContributions: Map<string, number>;
     walletSum?:number

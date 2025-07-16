@@ -47,20 +47,24 @@ export class DeleteUnfilledGamesUseCase  implements IDeleteUnfilledGamesUseCase{
                         description: "Refund of booking because of lack of players"
                 }
                 await this._walletServices.addFundsToWallet(userId._id, booking.price/booking.playerCount,transction,"client")
-              } catch (refundError:any) {
-                console.error("Refund failed:", {
-                  userId,
-                  bookingId: booking.id,
-                  error: refundError.message,
-                });
+              } catch (refundError) {
+                  if(refundError instanceof Error) {
+                    console.error("Refund failed:", {
+                      userId,
+                      bookingId: booking.id,
+                      error: refundError.message,
+                    });
+                }
               }
             }
             await this._slotServices.cancelTheSlots(booking)
-          } catch (updateError:any) {
-            console.error("Failed to cancel booking:", {
-              bookingId: booking.id,
-              error: updateError.message,
-            });
+          } catch (updateError) {
+            if(updateError instanceof Error) {
+              console.error("Failed to cancel booking:", {
+                bookingId: booking.id,
+                error: updateError.message,
+              });
+            }
           }
         }
       }

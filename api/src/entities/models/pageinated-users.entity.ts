@@ -1,6 +1,6 @@
-import { IClientEntity } from "./client.entity";
+import { IUserBasicInfo } from "../../shared/utils/MappingUsersData";
 
-export interface PagenateCustomers{
-    users:IClientEntity[] | [],
-    total:number
+export interface PagenateCustomers {
+  users: IUserBasicInfo[] | [];
+  total: number;
 }

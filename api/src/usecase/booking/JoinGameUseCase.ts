@@ -18,7 +18,8 @@ export class JoinGameUseCase implements IJoinGameUseCase{
         @inject("IClientRepository") private _clientRepo: IClientRepository,
         @inject("IChatRoomRepository") private _chatRoomRepo:IChatRoomRepository
     ){}
-    async execute(data: any): Promise< ISharedBookingEntity | null> {
+    async execute(data:{userId:string,date:string,price:number}): Promise< ISharedBookingEntity | null> {
+        console.log("data inside usecase", data);
         try {
             const booking = await this._bookingRepo.joinGame(data);
             if (booking && booking.userIds.length === booking.playerCount) {
@@ -83,7 +84,7 @@ export class JoinGameUseCase implements IJoinGameUseCase{
             }
 
             return booking;
-        } catch (error:any) {
+        } catch (error) {
             console.error("JoinGameUseCase failed:", error);
             throw error;
         }

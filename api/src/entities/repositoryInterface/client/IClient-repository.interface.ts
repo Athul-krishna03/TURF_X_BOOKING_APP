@@ -3,12 +3,12 @@
 import { IClientEntity } from "../../models/client.entity";
 import { ClientProfileResponse } from "../../../shared/responseTypes/clientProfileResponse";
 import { IBaseRepository } from "../IBase-repository-interface";
+import { FilterQuery } from "mongoose";
 
 export interface IClientRepository extends IBaseRepository<IClientEntity>{
-    // save(data:Partial<IClientEntity>):Promise<IClientEntity>;
     findByEmail(email:string):Promise<IClientEntity | null>;
     find(
-        filter:any,
+        filter:FilterQuery<IClientEntity>,
         skip:number,
         limit:number
     ):Promise<{users:IClientEntity[] | [];total:number}>;

@@ -35,7 +35,7 @@ export const turfvalidationSchema = z
     isBlocked: z.boolean().optional(),
     aminities: z.array(z.string()).min(1, "At least one amenity is required"),
     games: z.array(z.string()).min(1, "At least one game is required"),
-    turfPhotos: z.array(z.any()).optional(), 
+    turfPhotos: z.array(z.string()).optional(), 
     turfPhotoUrls: z.array(z.string().url()).optional(),
     location: z.object({
       address: z.string().min(3, "Address is required"),

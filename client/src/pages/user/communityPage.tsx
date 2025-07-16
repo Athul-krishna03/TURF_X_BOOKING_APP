@@ -11,13 +11,14 @@ import { useGetAllChatRooms } from "../../hooks/user/chatRoom/useGetChatRoom";
 import { uploadProfileImageCloudinary } from "../../utils/cloudinaryImageUpload";
 import { ChatRoom, Message, User } from "../../types/ChatRoomCommunityTypes";
 import { NewsSidebar } from "../../components/chatRoom/news-sidebar";
+import { RootState } from "../../store/store";
 
 const backendUrl = import.meta.env.VITE_BACKEND_API
 
 const socket = io(backendUrl, { autoConnect: false });
 
 export default function CommunityPage() {
-  const CURRENT_USER_ID = useSelector((state: any) => state.user.user.id);
+  const CURRENT_USER_ID = useSelector((state: RootState) => state.user?.user?.id);
   console.log("user id", CURRENT_USER_ID);
 
   const [selectedRoom, setSelectedRoom] = useState<ChatRoom | null>(null);
@@ -27,7 +28,7 @@ export default function CommunityPage() {
   const [isLoadingRooms, setIsLoadingRooms] = useState(true);
   const [isLoadingChat, setIsLoadingChat] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
-  const { data: chatRoomsData ,isLoading,refetch} = useGetAllChatRooms(CURRENT_USER_ID);
+  const { data: chatRoomsData ,isLoading,refetch} = useGetAllChatRooms(CURRENT_USER_ID || "");
   useEffect(() => {
     socket.connect();
 
@@ -207,7 +208,7 @@ export default function CommunityPage() {
               onSendImage={handleSendImage}
               getUserInfo={getUserInfo}
               formatTimestamp={formatTimestamp}
-              currentUserId={CURRENT_USER_ID}
+              currentUserId={CURRENT_USER_ID || ""}
               socketConnected={socketConnected}
             />
           )

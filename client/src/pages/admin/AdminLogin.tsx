@@ -28,10 +28,11 @@ const AdminLoginPage = () => {
           duration: 3000,
         });
       }
-    } catch (error: any) {
+    } catch (error:unknown) {
+      console.log(error)
       toast({
         title: "Error",
-        description: error.message || "Failed to login as admin.",
+        description: (error as Error).message || "Failed to login as admin.",
         variant: "destructive",
         duration: 3000,
       });

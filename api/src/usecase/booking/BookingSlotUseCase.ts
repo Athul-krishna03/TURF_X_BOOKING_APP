@@ -43,16 +43,8 @@ export class BookingSlotUseCase implements IBookingSlotUseCase {
       };
       console.log("data inside usecase", data);
       if (paymentType == "single") {
-        const bookingData= await this.bookingRepo.getUserBookingDetials(userId)
-        const date = new Date().getDay()
-        const filtered = bookingData.filter((data)=> (new Date(data.date).getDay() >= date && (new Date(data.date).getDay() < date + 3) ))
-        console.log("filtered data count",filtered.length)
-        if(filtered.length <= 3){
-          const saveData = await this.bookingRepo.save(data);
-          return saveData as IBookingEntity;
-        }else{
-          throw Error("limit execeed")
-        }
+        const saveData = await this.bookingRepo.save(data);
+        return saveData as IBookingEntity;
       } else if (paymentType == "shared") {
         let userIds = [userId];
         let walletContributions = new Map<string, number>();

@@ -27,10 +27,10 @@ const TurfLoginPage = () => {
           duration: 3000,
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Error",
-        description: error.message || "Failed to login as admin.",
+        description: (error as Error).message || "Failed to login as admin.",
         variant: "destructive",
         duration: 3000,
       });

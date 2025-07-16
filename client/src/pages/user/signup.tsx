@@ -134,7 +134,7 @@ const SignUp: React.FC = () => {
   const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
     googleLogin.mutate(
       {
-        credential: credentialResponse.credential,
+        credential: credentialResponse?.credential || "",
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
         role: "user",
       },

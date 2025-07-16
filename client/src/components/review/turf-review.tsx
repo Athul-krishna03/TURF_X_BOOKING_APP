@@ -8,6 +8,7 @@ import { Star, MessageSquare } from "lucide-react"
 import AddTurfReview from "./add-turf-review"
 import {  useReviews } from "../../hooks/review/useGetReviews"
 import { useSelector } from "react-redux"
+import { RootState } from "../../store/store"
 
 interface Review {
   id: string
@@ -38,7 +39,7 @@ export interface IReviewEntity {
 export default function TurfReviews({ turfId, turfName }: TurfReviewsProps) {
 
    const { data: reviews = [], addReview } = useReviews(turfId)
-   const user = useSelector((state:any)=>state.user.user)
+   const user = useSelector((state:RootState)=>state.user.user)
 
     const [showAddReview, setShowAddReview] = useState(false)
 
@@ -84,7 +85,7 @@ export default function TurfReviews({ turfId, turfName }: TurfReviewsProps) {
                     Reviews & Ratings
                 </span>
                 </CardTitle>
-                {!reviews.some((val:IReviewEntity)=>val.clientName == user.name) &&
+                {!reviews.some((val:IReviewEntity)=>val.clientName == user?.name) &&
                 <Button
                 onClick={() => setShowAddReview(!showAddReview)}
                 className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600"

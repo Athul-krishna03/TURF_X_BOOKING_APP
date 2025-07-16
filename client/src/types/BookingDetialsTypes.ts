@@ -7,7 +7,7 @@ export interface User {
 }
 
 export interface TurfDetails {
-    turfPhotos: any
+    turfPhotos: string[]
     name: string
     location: {
         city:string,
@@ -23,7 +23,11 @@ export interface TurfDetails {
 export interface Booking {
     walletContributions(walletContributions: any): unknown
     playerCount: number
-    userIds: any
+    userIds: {
+        _id: string
+        name: string
+        profileImage?: string
+    }[]
     _id: string
     date: string
     time: string

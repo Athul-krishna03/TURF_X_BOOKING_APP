@@ -79,16 +79,8 @@ export  class BookingController implements IBookingController{
                 bookingData
             })
             return 
-        } catch (error:any) {
-            console.error('Join game error:', {
-                userId: (req as CustomRequest).user.id,
-                body: req.body,
-                error: error.message,
-            });
-            res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-                success: false,
-                message: `Failed to join game: ${error.message}`,
-            });
+        } catch (error) {
+            handleErrorResponse(res, error);
         }
     }
     async getAllBookingData(req:Request, res:Response):Promise<void>{

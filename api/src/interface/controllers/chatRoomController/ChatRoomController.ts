@@ -44,7 +44,7 @@ export class ChatRoomControllers{
                 })
                 return 
             }
-        } catch (error:any) {
+        } catch (error) {
             handleErrorResponse(res,error)
         }
     }
@@ -66,7 +66,7 @@ export class ChatRoomControllers{
                 message:SUCCESS_MESSAGES.CREATED,
                 data: newChatRoom
             });
-        } catch (error:any) {
+        } catch (error) {
             handleErrorResponse(res,error)
         }
     }
@@ -96,7 +96,7 @@ export class ChatRoomControllers{
                 })
                 return 
             }
-        } catch (error:any) {
+        } catch (error) {
             handleErrorResponse(res,error)
         }
     }

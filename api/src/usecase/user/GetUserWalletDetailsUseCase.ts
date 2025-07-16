@@ -18,8 +18,8 @@ export class GetUserWalletDetailsUseCase implements IGetUserWalletDetailsUseCase
         }
 
         return walletDetails;
-        } catch (error:any) {
-        throw new Error(`Error fetching wallet details: ${error.message}`);
+        } catch (error) {
+        throw new Error(`Error fetching wallet details: ${error instanceof Error ? error.message : "Unknown error"}`);
         }
     }
 }
