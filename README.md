@@ -1,11 +1,6 @@
 # Turf-X 🏟️  
 A full-featured turf booking platform built with the MERN stack and TypeScript. Turf-X allows users to book sports turf slots, host games, join shared slots, chat with co-players, and make secure payments.
 
-## 🔗 Live Demo
-[Coming Soon] – Add your deployed URL here
-
----
-
 ## 📌 Features
 
 - 🎯 **Slot Booking**: Book turf slots in real-time with lock-based synchronization to avoid double booking.
